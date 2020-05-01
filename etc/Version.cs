@@ -17,16 +17,14 @@
 ////
 //// Public key as per Web.Transfer.pfx
 ////
-namespace Web.Transfer.Properties
+namespace Web.Transfer
 {
 	/// <summary>
-	/// Public key to use with InternalsVisibleTo attribute.
+	/// Product's public key.
 	/// </summary>
-	internal class MainPublicKey
+	internal class PublicKey
 	{
-		/// <summary>
-		/// Public key value.
-		/// </summary>
+		/// <summary/>
 		internal const string HexValue =
 			@"00240000048000009400000006020000" +
 			@"00240000525341310004000001000100" +
