@@ -1,0 +1,18 @@
+﻿// Decompiled with JetBrains decompiler
+// Type: Mono.Math.Prime.ConfidenceFactor
+// Assembly: Mono.Security, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756
+// MVID: 535AFC59-3048-44B3-B63E-2F16A106C177
+// Assembly location: C:\Program Files (x86)\FtpDav\Mono.Security.dll
+
+namespace Mono.Math.Prime
+{
+  public enum ConfidenceFactor
+  {
+    ExtraLow,
+    Low,
+    Medium,
+    High,
+    ExtraHigh,
+    Provable,
+  }
+}

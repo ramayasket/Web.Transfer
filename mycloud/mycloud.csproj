@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: C:\Program Files (x86)\FtpDav\mycloud.exe-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CC60E4D2-03C5-4FFB-8DF1-E7FE6D4326D3}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>mycloud</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ApplicationVersion>1.0.4700.21522</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>..\etc\Web.Transfer.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\etc\Web.Transfer.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="System\Net\Security\SslStreamM.cs" />
+    <Compile Include="ChrisLib\EncDec.cs" />
+    <Compile Include="ChrisLib\stringextensions.cs" />
+    <Compile Include="ChrisLib\clib.cs" />
+    <Compile Include="ChrisLib\MyLog.cs" />
+    <Compile Include="ChrisLib\SimpleHash.cs" />
+    <Compile Include="ChrisLib\AuthDigest.cs" />
+    <Compile Include="ChrisLib\Bstring.cs" />
+    <Compile Include="Mylib\MyBuffer.cs" />
+    <Compile Include="Mylib\stat.cs" />
+    <Compile Include="Mylib\Link.cs" />
+    <Compile Include="Mylib\Imap.cs" />
+    <Compile Include="Mylib\Header.cs" />
+    <Compile Include="Mylib\WebGetRequest.cs" />
+    <Compile Include="Mylib\WebPostRequest.cs" />
+    <Compile Include="Mylib\WebPostBinary.cs" />
+    <Compile Include="Mylib\WebHelpers.cs" />
+    <Compile Include="Mylib\Ftplink.cs" />
+    <Compile Include="Mylib\Mime.cs" />
+    <Compile Include="Mylib\Attachment.cs" />
+    <Compile Include="Mylib\Attachments.cs" />
+    <Compile Include="Mylib\Smtp.cs" />
+    <Compile Include="Mylib\Pairs.cs" />
+    <Compile Include="TcpLib\TcpServiceProvider.cs" />
+    <Compile Include="TcpLib\ConnectionState.cs" />
+    <Compile Include="TcpLib\TcpServer.cs" />
+    <Compile Include="mycloud\SecureTcpServer.cs" />
+    <Compile Include="mycloud\SecureConnectionResultsCallback.cs" />
+    <Compile Include="mycloud\SecureConnectionResults.cs" />
+    <Compile Include="mycloud\Quota.cs" />
+    <Compile Include="mycloud\ProjectInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="mycloud\Wmethod.cs" />
+    <Compile Include="mycloud\Websvc.cs" />
+    <Compile Include="mycloud\WebModule.cs" />
+    <Compile Include="mycloud\WebForm.cs" />
+    <Compile Include="mycloud\Service1.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="mycloud\Fail.cs" />
+    <Compile Include="mycloud\Lock.cs" />
+    <Compile Include="mycloud\Property.cs" />
+    <Compile Include="mycloud\MyMain.cs" />
+    <Compile Include="mycloud\ProgramPlatform.cs" />
+    <Compile Include="mycloud\En.cs" />
+    <Compile Include="mycloud\Etype.cs" />
+    <Compile Include="mycloud\Ini.cs" />
+    <Compile Include="mycloud\Web.cs" />
+    <Compile Include="mycloud\Profile.cs" />
+    <Compile Include="mycloud\VPath.cs" />
+    <Compile Include="mycloud\WebFile.cs" />
+    <Compile Include="mycloud\WebDav.cs" />
+    <Compile Include="mycloud\XResponse.cs" />
+    <Compile Include="mycloud\Ething.cs" />
+    <Compile Include="mycloud\IfItem.cs" />
+    <Compile Include="mycloud\Vuser.cs" />
+    <Compile Include="mycloud\UserDb.cs" />
+    <Compile Include="mycloud\User.cs" />
+    <Compile Include="mycloud\MyKey.cs" />
+    <Compile Include="mycloud\Session.cs" />
+    <Compile Include="mycloud\SimpleStream.cs" />
+    <Compile Include="mycloud\EchoServiceProvider.cs" />
+    <Compile Include="mycloud\Files.cs" />
+    <Compile Include="mycloud\Fileinfo.cs" />
+    <Compile Include="mycloud\Index.cs" />
+    <Compile Include="mycloud\Program.cs" />
+    <Compile Include="mycloud\FtpService.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="mycloud\ProjectInstaller.resx" />
+    <EmbeddedResource Include="mycloud\Service1.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mono.Security\Mono.Security.csproj">
+      <Project>{3b3d2344-ca17-43ee-bde2-5d780eedb2e0}</Project>
+      <Name>Mono.Security</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
