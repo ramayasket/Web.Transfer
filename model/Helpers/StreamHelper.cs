@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace model.Streaming
+namespace model.Helpers
 {
     public class StreamHelper
     {

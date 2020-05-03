@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using model.Crypto;
 using Kw.Common;
 
 namespace model
@@ -24,6 +25,8 @@ namespace model
         /// </remarks>
         internal static void TransformationModel()
         {
+            TestData.Cleanup();
+
             const string PASSWORD = "Деремнустах!";
 
             var my_input =
@@ -62,7 +65,7 @@ namespace model
             catch (FormatException x)
             {
                 Console.WriteLine("Confidential string is protected against Base64");
-                File.WriteAllText("C:\\1.transferring", my_confidential);
+                File.WriteAllText("C:\\1.confidential", my_confidential);
             }
 
             ////

@@ -15,8 +15,9 @@ namespace model.Zip
         public Stream InputStream => GetInputStream(_entry);
 
         /// <inheritdoc />
-        public SingularInflater(Stream stream) : base(stream)
+        public SingularInflater(Stream stream, string password = null) : base(stream)
         {
+            Password = password;
             _entry = GetEntry("0");
         }
     }

@@ -11,12 +11,14 @@ namespace model.Zip
     public class SingularDeflaterStream : ZipOutputStream
     {
         /// <inheritdoc />
-        public SingularDeflaterStream(Stream baseOutputStream) : base(baseOutputStream)
+        public SingularDeflaterStream(Stream stream, string password = null) : base(stream)
         {
+            Password = password;
+            
             // we want compression over speed
             SetLevel(9);
 
-            var entry = new ZipEntry("0");
+            var entry = new ZipEntry("0") { IsCrypted = !string.IsNullOrWhiteSpace(password) };
             PutNextEntry(entry);
         }
     }
