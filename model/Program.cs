@@ -2,56 +2,62 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using ICSharpCode.SharpZipLib.Zip;
 using Kw.Common;
+using model.Streaming;
+using model.Zip;
 
 namespace model
 {
-	class Program
-	{
-		static void Main(string[] args)
-		{
-			const string PASSWORD = "Деремнустах!";
+    partial class Program
+    {
+        static void Main()
+        {
+            const string INPUT = "C:\\1.input";
+            const string PACKED = "C:\\1.zip";
+            const string OUTPUT = "C:\\1.output";
 
-			var my_bytes =
-				File.ReadAllBytes("C:\\1.jpg");
-				//new byte[] { 0x08, 0x00, 0x52 };
-				//new byte[] { 0x08, 0x00 };
-				//new byte[] { 0x08 };
-				//new byte[0];
+            File.Delete(PACKED);
+            File.Delete(OUTPUT);
 
-			var my_confidential = my_bytes.ToConfidentialString();
+            Console.WriteLine($"Files deleted: {PACKED} {OUTPUT}");
 
-			try
-			{
-				var try64 = Convert.FromBase64String(my_confidential);
-				throw new InvalidOperationException("Confidential string is Base64-compatible");
-			}
-			catch (FormatException x)
-			{
-				Console.WriteLine("Confidential string is Base64-protected");
-				File.WriteAllText("C:\\1.confidential", my_confidential);
-			}
+            Console.WriteLine("Starting \"to\" transform...");
 
-			var my_secret = RijndaelCrypting.Encrypt(my_confidential, PASSWORD);
-			File.WriteAllBytes("C:\\1.secret", my_secret);
+            var BUFFER_SIZE = 1024;
+            var buffer = new byte[BUFFER_SIZE];
 
-			var my_secret_text = my_secret.ToConfidentialString();
-			File.WriteAllText("C:\\1.secret_text", my_secret_text);
+            using (var inputStream = File.OpenRead(INPUT))
+            {
+                using (var outputStream = File.OpenWrite(PACKED))
+                {
+                    using (var zipStream = new SingularDeflaterStream(outputStream))
+                    {
+                        var total = StreamHelper.ReadAndWriteAll(inputStream, zipStream, buffer);
+                        Console.WriteLine($@"Total number of bytes read/deflated is {total}");
+                    }
+                }
+            }
 
-			var my_unsecret = my_secret_text.FromConfidentialString();
-			File.WriteAllBytes("C:\\1.unsecret", my_unsecret);
+            Console.WriteLine("About to transform from");
 
-			var my_unconfidential = RijndaelCrypting.Decrypt(my_unsecret, PASSWORD);
-
-			if(my_confidential == my_unconfidential)
-				Console.WriteLine("Encrypt/Decrypt sequence is correct");
-			else
-				throw new InvalidOperationException("Encrypt/Decrypt sequence is incorrect");
-
-			var my_restored = my_unconfidential.FromConfidentialString();
-			File.WriteAllBytes("C:\\1.restored", my_restored);
-		}
-	}
+            using (var inputStream = File.OpenRead(PACKED))
+            {
+                using (var outputStream = File.OpenWrite(OUTPUT))
+                {
+                    using (var inflater = new SingularInflater(inputStream))
+                    {
+                        using (var inflaterStream = inflater.InputStream)
+                        {
+                            var total = StreamHelper.ReadAndWriteAll(inflaterStream, outputStream, buffer);
+                            Console.WriteLine($@"Total number of bytes read/inflated is {total}");
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
