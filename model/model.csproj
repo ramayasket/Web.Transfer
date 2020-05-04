@@ -65,6 +65,8 @@
     <Compile Include="..\etc\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="Base32\Base32Core.cs" />
+    <None Include="Base32\private_convert.cs" />
     <Compile Include="ConfidentialConverter.cs" />
     <Compile Include="Crypto\RijndaelParameters.cs" />
     <Compile Include="Crypto\RijndaelStreamedCrypting.cs" />
