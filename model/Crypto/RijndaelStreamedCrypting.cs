@@ -2,6 +2,8 @@
 using System.IO;
 using System.Security.Cryptography;
 
+using Kw.Common;
+
 namespace model.Crypto
 {
     /// <summary>
@@ -32,24 +34,23 @@ namespace model.Crypto
         /// <param name="mode">Stream mode.</param>
         public RijndaelStreamedCrypting(Stream stream, string password, CryptoStreamMode mode)
         {
+            if(null == stream)
+                throw new ArgumentNullException(nameof(stream));
+
+            if(string.IsNullOrWhiteSpace(password))
+                throw new ArgumentNullException(nameof(password));
+
+            if(mode.Out(CryptoStreamMode.Write, CryptoStreamMode.Read))
+                throw new ArgumentOutOfRangeException(nameof(mode), "Expected Read or Write value.");
+
             _key = new Rfc2898DeriveBytes(password, RijndaelParameters.SALT, RijndaelParameters.ITERATIONS);
             _symmetricKey = new RijndaelManaged { BlockSize = 256, Mode = CipherMode.CBC, Padding = PaddingMode.PKCS7 };
 
             var keyBytes = _key.GetBytes(RijndaelParameters.KEYSIZE / 8);
 
-            switch (mode)
-            {
-                case CryptoStreamMode.Read:
-                    _transform = _symmetricKey.CreateDecryptor(keyBytes, RijndaelParameters.IV);
-                    break;
-
-                case CryptoStreamMode.Write:
-                    _transform = _symmetricKey.CreateEncryptor(keyBytes, RijndaelParameters.IV);
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(mode), "Expected Read or Write values only.");
-            }
+            _transform = (CryptoStreamMode.Read == mode) ?
+                _symmetricKey.CreateDecryptor(keyBytes, RijndaelParameters.IV) :
+                _symmetricKey.CreateEncryptor(keyBytes, RijndaelParameters.IV);
 
             CryptoStream = new CryptoStream(stream, _transform, mode);
         }
