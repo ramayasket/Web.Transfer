@@ -96,6 +96,9 @@ label_8:
 
     public bool save(string path)
     {
+      // A.S.: no *.~prop files please!
+      return true;
+
       TextWriter textWriter;
       try
       {
