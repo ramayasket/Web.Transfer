@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Kw.Common;
@@ -10,70 +11,27 @@ namespace model.Base32
     /// <summary>
     /// Base-32 encoding and decoding.
     /// </summary>
-    public class Base32Core
+    public partial class Base32Core
     {
         ////
-        //// A byte array to encode is divided into
-        //// zero or more 'native' blocks of 5 bytes
-        //// and remaining 1-4 bytes are called cutoff block.
+        ////   A byte array to encode is divided into
+        ////   zero or more 'native' blocks of 5 bytes
+        ////   and remaining 1-4 bytes are called cutoff block.
         ////
-        //// Each native block is encoded with 8 base-32 characters
-        //// (see _baseTable), the cutoff block is encoded with...
+        ////   Each native block is encoded with 8 base-32 characters (see EncodeTable)
+        ////   Each cutoff block of size (1,2,3,4) is encoded with (3,5,6,8) base-32 characters, respectively.
         ////
 
-        /// <summary>
-        /// Conversion table. Will add shuffling later on.
-        /// </summary>
-        internal static readonly char[] BaseTable = {
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
-            'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
-            'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
-            'y', 'z', '1', '2', '3', '4', '5', '6', };
-
-        /// <summary>
-        /// Masks to apply to imprinted value.
-        /// </summary>
-        internal static readonly ulong[] BlockMasks = {
-            0x0, // unused value
-            0xff,
-            0xffff,
-            0xffffff,
-            0xffffffff,
-            0xffffffffff,
-        };
-
-        /// <summary>
-        /// Masks to apply to cutoffs.
-        /// </summary>
-        internal static readonly ulong[] CutoffMasks = {
-            0x00, // unused value
-            0x01,
-            0x03,
-            0x07,
-            0x0f,
-            0x1f,
-        };
-
-        /// <summary>
-        /// Cut-off character indicates byte sequence shorter than 5.
-        /// </summary>
-        internal const char CUTOFF = '0';
-
-        /// <summary>
-        /// Number of bits per encoding character.
-        /// </summary>
-        internal const int ENCODING_BITS = 5;
-
-        /// <summary>
-        /// Byte array size which is 'native' to Base32 encoding.
-        /// Arrays of this size are encoded without cut-off characters.
-        /// </summary>
-        internal const int NATIVE_BLOCK_SIZE = 5;
-
-        /// <summary>
-        /// Number of characters to encode 'native' block.
-        /// </summary>
-        internal const int NATIVE_CODE_SIZE = 8;
+        ////
+        ////   Cutoff parameters for possible cutoff block sizes
+        ////
+        ////   Length   Cutoff   CutoffBits   CutoffCode   CutoffExtraBits   CutoffExtraCode   Native   NativeCode   TotalCode
+        ////   1        1        8            1            3                 2                 0        0            3
+        ////   2        2        16           3            1                 2                 0        0            5
+        ////   3        3        24           4            4                 2                 0        0            6
+        ////   4        4        32           6            2                 2                 0        0            8
+        ////   5        0        0            0            0                 0                 1        8            8
+        ////
 
         internal readonly struct ArrayEncodingParameters
         {
@@ -122,7 +80,7 @@ namespace model.Base32
             if (null == array)
                 throw new ArgumentNullException(nameof(array));
 
-            if(0 == array.Length)
+            if (0 == array.Length)
                 return String.Empty;
 
             return ToBase32StringInternal(array);
@@ -130,46 +88,75 @@ namespace model.Base32
 
         public static byte[] FromBase32String(string input)
         {
-            if(null == input)
+            if (null == input)
                 throw new ArgumentNullException(nameof(input));
 
-            if(string.IsNullOrEmpty(input))
+            if (string.IsNullOrEmpty(input))
                 return new byte[0];
 
             return FromBase32StringInternal(input);
         }
 
-
-        ////
-        ////   Cutoff parameters for possible cutoff block sizes
-        ////
-        ////   Length   Cutoff   CutoffBits   CutoffCode   CutoffExtraBits   CutoffExtraCode   Native   NativeCode   TotalCode
-        ////   1        1        8            1            3                 2                 0        0            3
-        ////   2        2        16           3            1                 2                 0        0            5
-        ////   3        3        24           4            4                 2                 0        0            6
-        ////   4        4        32           6            2                 2                 0        0            8
-        ////   5        0        0            0            0                 0                 1        8            8
-        ////
-
-        internal class DecodingBlock
+        internal struct DecodingBlock
         {
-            private readonly byte[] Body = new byte[NATIVE_BLOCK_SIZE];
-            private readonly char[] Code = new char[NATIVE_CODE_SIZE];
+            private int _code; // number of code characters
+            private int _cutoff; // position of cutoff character
 
-            private int CodeIndex = 0;
-            private int CutoffIndex = 0;
+            /// <summary>
+            /// For tests only: if True, the block will accept no more code characters.
+            /// </summary>
+            internal bool Finished { get; private set; }
 
+            /// <summary>
+            /// Number of decoded bytes in the block.
+            /// </summary>
+            public int DataLength =>
+                (_code == 3) ? 1 :
+                (_code == 5) ? 2 :
+                (_code == 6) ? 3 :
+                (_code == 8 && _cutoff == 6) ? 4 : 5;
+
+            /// <summary>
+            /// Number of code characters in the block.
+            /// </summary>
+            public int CodeLength => _code;
+            
+            /// <summary>
+            /// Verifies a candidate character which wants to be added to the block.
+            /// </summary>
+            /// <param name="code">Candidate character.</param>
+            /// <param name="final">True if candidate is the very last one.</param>
+            /// <returns>True if block is finished, False otherwise.</returns>
             public bool AddCode(char code, bool final)
             {
+                if (!IsEncodeCharacter(code))
+                    throw new InvalidOperationException("Adding invalid code");
+
+                if (Finished)
+                    throw new InvalidOperationException("Adding code to finished block");
+
                 if (CUTOFF == code) {
 
-                    if(0 == CodeIndex || (NATIVE_CODE_SIZE-1) == CodeIndex)
+                    if (0 == _code || (NATIVE_CODE_SIZE - 1) == _code || 0 != _cutoff)
                         throw new InvalidOperationException("Cutoff character in a wrong position");
+
+                    _cutoff = _code;
                 }
 
-                Code[CodeIndex++] = code;
+                _code++;
 
-                return true;
+                if (final && _code < NATIVE_CODE_SIZE && 0 == _cutoff)
+                    throw new InvalidOperationException("Incomplete block without cutoff");
+
+                if (final && 0 != _cutoff && _cutoff + 2 != _code)
+                    throw new InvalidOperationException("Incomplete block with cutoff at the end");
+
+                Finished = false
+                           || final // we're told it's finished
+                           || NATIVE_CODE_SIZE == _code // we have all 8 characters
+                           || (_cutoff + 2 == _code && 0 != _cutoff); // we have cutoff and 1 extra character
+
+                return Finished;
             }
         }
 
@@ -179,9 +166,9 @@ namespace model.Base32
 
             var inputLength = input.Length;
 
-            var blocks = new List<DecodingBlock>();
+            var accumulator = new List<DecodingBlock>();
 
-            fixed (char* characters = &input.ToCharArray()[0]) {
+            fixed (char* code = &input.ToCharArray()[0]) {
 
                 var current = new DecodingBlock();
 
@@ -189,28 +176,98 @@ namespace model.Base32
                 {
                     var is_final = (i == inputLength - 1); // is it the final character?
 
-                    var c = *(characters + i);
-
-                    if (!IsEncodeCharacter(c))
-                        throw new ArgumentException(ERROR_MESSAGE, nameof(input)); // not a character from BaseTable
+                    var c = *(code + i);
 
                     bool eob;
 
-                    try {
-                        eob = current.AddCode(c, is_final);
+                    try
+                    {
+                        // verify next character against block descriptor
+                        // and adjust block parameters
+                        eob = current.AddCode(c, is_final); // end of block
                     }
-                    catch (InvalidOperationException) {
-                        throw new ArgumentException(ERROR_MESSAGE, nameof(input)); // wrong placement of cutoff character
+                    catch (InvalidOperationException iox)
+                    {
+                        throw new ArgumentException(ERROR_MESSAGE, nameof(input), iox); // invalid code(s) added to the block
                     }
 
-                    if (eob) {
-                        blocks.Add(current);
-                        current = new DecodingBlock();
+                    if (eob)
+                    { // if block is finished
+
+                        accumulator.Add(current); // add to the accumulator
+                        current = new DecodingBlock(); // and start a new block
                     }
                 }
+
+                fixed (DecodingBlock* blocks = &(accumulator.ToArray())[0])
+                {
+
+                    var totalDecodeLength = accumulator.Sum(b => b.DataLength);
+                    var totalBlocks = accumulator.Count;
+
+                    var output = new byte[totalDecodeLength];
+
+                    fixed (byte* data = &output[0])
+                    {
+
+                        var codeOffset = 0; // offset in code buffer
+                        var dataOffset = 0; // offset in data buffer
+
+                        for (var b = 0; b < totalBlocks; b++)
+                        {
+
+                            var pblock = (blocks + b);
+                            var pcode = (code + codeOffset);
+                            var block = *pblock;
+
+                            var imprinted = DecodeBlock(pcode, pblock);
+
+                            byte* pimpmrinted = (byte*)&imprinted;
+
+                            Copy(pimpmrinted, (data + dataOffset), block.DataLength);
+
+                            codeOffset += block.CodeLength;
+                            dataOffset += block.DataLength;
+                        }
+                    }
+
+                    return output;
+                }
+            }
+        }
+
+        private static unsafe void Copy(byte* pFrom, byte* pTo, int length)
+        {
+            for (int i = 0; i < length; i++)
+                *(pTo + i) = *(pFrom + i);
+        }
+
+        private static unsafe ulong DecodeBlock(char* codeBuffer, DecodingBlock* pblock)
+        {
+            var block = *pblock;
+
+            ulong receptor = 0; // receives imprinted 
+            var imprintOffset = 0;
+
+            for (int i = 0; i < block.CodeLength; i++) {
+
+                var code = *(codeBuffer + i);
+
+                if (CUTOFF == code)
+                    continue;
+
+                var data = DecodeTable[code];
+
+                ulong imprinted = 0;
+
+                imprinted |= data;
+                imprinted <<= imprintOffset;
+
+                receptor |= imprinted;
+                imprintOffset += ENCODING_BITS;
             }
 
-            return new byte[0];
+            return receptor;
         }
 
         /// <summary>
@@ -220,9 +277,8 @@ namespace model.Base32
         /// <returns>True for valid character, False otherwise.</returns>
         private static bool IsEncodeCharacter(char c)
         {
-            foreach (var b in BaseTable)
-                if (c == b || CUTOFF == c)
-                    return true;
+            if ((c >= 'a' && c <= 'z') || (c >= '1' && c <= '6') || c == CUTOFF)
+                return true;
 
             return false;
         }
@@ -233,8 +289,7 @@ namespace model.Base32
             var encoded = new char[parameters.TotalCode];
             var encodedOffset = 0;
 
-            fixed (byte* buffer = &array[0])
-            {
+            fixed (byte* buffer = &array[0]) {
                 //
                 // input is processed in blocks of ≤ 5 bytes
                 //
@@ -242,18 +297,17 @@ namespace model.Base32
                 var length = array.Length;
 
                 // go through all blocks in buffer
-                while (block < length)
-                {
+                while (block < length) {
                     // get size of next block
                     var size = Math.Min(NATIVE_BLOCK_SIZE, length - block);
 
-                    ulong* imprint = (ulong*)(buffer + block);
+                    ulong* imprint = (ulong*) (buffer + block);
                     ulong imprinted = *imprint;
 
                     // limit imprinted bytes to the current block's only
                     imprinted &= BlockMasks[size];
 
-                    var encodedBlock = BlockToBase32String(imprinted, size);
+                    var encodedBlock = EncodeBlock(imprinted, size);
                     Array.Copy(encodedBlock, 0, encoded, encodedOffset, encodedBlock.Length);
 
                     encodedOffset += encodedBlock.Length;
@@ -266,7 +320,7 @@ namespace model.Base32
             return new string(encoded);
         }
 
-        private static char[] BlockToBase32String(ulong imprinted, int size)
+        private static char[] EncodeBlock(ulong imprinted, int size)
         {
             var parameters = new ArrayEncodingParameters(size);
             var output = new char[parameters.TotalCode];
@@ -276,17 +330,16 @@ namespace model.Base32
             var imprintedBits = size * 8;
             var offset = 0;
 
-            while (offset < imprintedBits)
-            {
+            while (offset < imprintedBits) {
+
                 var bits = Math.Min(ENCODING_BITS, imprintedBits - offset);
 
                 var mask = CutoffMasks[bits];
 
                 var encode = imprinted & mask;
-                var encoded = BaseTable[encode];
+                var encoded = EncodeTable[encode];
 
-                if (bits < ENCODING_BITS)
-                {
+                if (bits < ENCODING_BITS) {
                     output[ox++] = CUTOFF;
                 }
 

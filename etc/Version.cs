@@ -15,10 +15,11 @@
     Date         Version        Comments
     ===============================================================================
     29.04.2020   0.0.0.1        Project created
-    16.05.2020   0.0.1.0        Base-32 Encoding done
+    16.05.2020   0.0.1.0        Base-32 encoding done
+    16.05.2020   0.0.2.0        Base-32 decoding done
 */
 
-[assembly: AssemblyVersion("0.0.1.0")]
+[assembly: AssemblyVersion("0.0.2.0")]
 
 [assembly: AssemblyProduct("Web Transfer Protocol (WTP)")]
 [assembly: AssemblyCompany("Andrei Samoylov")]

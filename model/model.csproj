@@ -69,6 +69,9 @@
       <Link>Properties\Version.cs</Link>
     </Compile>
     <Compile Include="Base32\Base32Core.cs" />
+    <Compile Include="Base32\Base32Core.Data.cs">
+      <DependentUpon>Base32Core.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfidentialConverter.cs" />
     <Compile Include="Crypto\RijndaelParameters.cs" />
     <Compile Include="Crypto\RijndaelStreamedCrypting.cs" />
