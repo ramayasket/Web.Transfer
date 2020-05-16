@@ -52,8 +52,8 @@
     <Reference Include="ICSharpCode.SharpZipLib, Version=1.2.0.246, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.1.2.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Kw.Common, Version=1.1.0.1, Culture=neutral, PublicKeyToken=0368a69deeef33dd, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kw.Common.1.1.0.1\lib\net45\Kw.Common.dll</HintPath>
+    <Reference Include="Kw.Common, Version=1.2.0.0, Culture=neutral, PublicKeyToken=0368a69deeef33dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Kw.Common.1.2.0\lib\net47\Kw.Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -69,7 +69,6 @@
       <Link>Properties\Version.cs</Link>
     </Compile>
     <Compile Include="Base32\Base32Core.cs" />
-    <None Include="Base32\private_convert.cs" />
     <Compile Include="ConfidentialConverter.cs" />
     <Compile Include="Crypto\RijndaelParameters.cs" />
     <Compile Include="Crypto\RijndaelStreamedCrypting.cs" />

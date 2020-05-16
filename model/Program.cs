@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 using Kw.Common;
 using model.Base32;
@@ -17,36 +18,30 @@ namespace model
 {
     partial class Program
     {
-        static readonly byte[][] _data = new[]
+        static readonly byte[][] _data =
         {
-            new byte[] { 0xab },
-            new byte[] { 0x80, 0x52 },
-            new byte[] { 0x08, 0x00, 0x52 },
-            new byte[] { 0x13, 0x01, 0x19, 0x68 },
-            new byte[] { 0xab, 0x13, 0x01, 0x19, 0x68 },
+            //new byte[] { },
+            //new byte[] { 0xab },
+            //new byte[] { 0x80, 0x52 },
+            //new byte[] { 0x08, 0x00, 0x52 },
+            //new byte[] { 0x13, 0x01, 0x19, 0x68 },
+            //new byte[] { 0xab, 0x13, 0x01, 0x19, 0x68 },
+            new byte[] { 0xab, 0x13, 0x01, 0x19, 0x68, 0xba, 0x31, 0x10, 0x91, 0x86 },
+            new byte[] { 0xab, 0x13, 0x01, 0x19, 0x68, 0xba, 0x31, 0x10, 0x91, 0x86, 0xff },
         };
 
-        static void Main()
+        static void Main(string[] args)
         {
-            var data = new []
-            {
-                new byte[] { 0xab },
-                new byte[] { 0x80, 0x52 },
-                new byte[] { 0x08, 0x00, 0x52 },
-                new byte[] { 0x13, 0x01, 0x19, 0x68 },
-                new byte[] { 0xab, 0x13, 0x01, 0x19, 0x68 },
-            };
+            var s = "aaaaaaaa";
+            var b = Base32Core.FromBase32String(s);
 
-            foreach (var a in _data)
-            {
-                DoWithData(a);
-            }
+            //foreach (var x in _data)
+            //{
+            //    var s = Base32Core.ToBase32String(x);
+            //    Console.WriteLine($"Base32 encoding: source data '{BitConverter.ToString(x)}' ({x.Length} bytes), encoded string '{s}' ({s.Length} characters)");
 
-            for (int i = 0; i < 11; i++)
-            {
-                var encoded = Base32Core.GetEncodedLength(i);
-                //Console.WriteLine($"Block size {i}, encoded size {encoded}");
-            }
+            //    var x1 = Base32Core.FromBase32String(s);
+            //}
         }
 
         static unsafe void DoWithData(byte[] input)
