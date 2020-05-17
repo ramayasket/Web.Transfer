@@ -32,7 +32,47 @@ namespace model
 
         static void Main(string[] args)
         {
-            GrossTest();
+            //CharArrayingTest();
+            SplitStringDecodeTest();
+            //GrossTest();
+            //MiddleTest();
+        }
+
+        private static void SplitStringDecodeTest()
+        {
+            const int DATA_SIZE = 13;
+            const int FRAGMENT_SIZE = 5;
+
+            byte[] data1 = new byte[DATA_SIZE];
+
+            for (int i = 0; i < DATA_SIZE; i++)
+                data1[i] = (byte) i;
+
+            string base32 = Base32Core.ToBase32String(data1);
+            var length32 = base32.Length;
+
+            var accumulator = new List<byte>();
+            Action<byte[]> handler = (i) => { foreach (var x in i) accumulator.Add(x); };
+
+            using (var pipe = Base32Core.CreateDecodePipe(handler)) {
+
+                var offset = 0;
+                while (offset < base32.Length)
+                {
+
+                    var length = Math.Min(FRAGMENT_SIZE, base32.Length - offset);
+
+                    var fragment = base32.Substring(offset, length);
+                    pipe.FeedBase32Fragment(fragment);
+
+                    offset += FRAGMENT_SIZE;
+                }
+            }
+
+            var data2 = accumulator.ToArray();
+
+            var isok = data2.SequenceEqual(data1);
+
         }
 
         private static void MiddleTest()
@@ -91,18 +131,10 @@ namespace model
             var bytes2 = Base32Core.FromBase32String(compound);
         }
 
-        private static void GrossTest()
+        private static void PortionTest()
         {
             var bytes1 = File.ReadAllBytes("C:\\1.input");
             var length1 = bytes1.Length;
-
-            //var base32 = Base32Core.ToBase32String(bytes1);
-
-            //File.WriteAllText("C:\\1.base32", base32);
-
-            //var bytes2 = Base32Core.FromBase32String(base32);
-
-            //File.WriteAllBytes("C:\\1.output", bytes2);
 
             const int PORTION = 1024;
             var offset = 0;
@@ -119,7 +151,6 @@ namespace model
 
                 var s = Base32Core.ToBase32String(buffer);
                 output.Append(s);
-                //Console.WriteLine($"offset {offset} length {length}");
 
                 offset += PORTION;
             }
@@ -136,21 +167,56 @@ namespace model
             var isok = bytes1.SequenceEqual(bytes3);
 
             Console.WriteLine($"isok {isok}: {total}/{length3}");
+        }
 
-            //foreach (var x in _data)
-            //{
-            //    Console.WriteLine("Base32 encoding:");
-            //    Console.WriteLine($"bytes (1): '{BitConverter.ToString(x)}' ({x.Length} bytes)");
+        private static void GrossTest(bool report = false)
+        {
+            var bytes1 = File.ReadAllBytes("C:\\1.input");
+            var length1 = bytes1.Length;
 
-            //    var s = Base32Core.ToBase32String(x);
-            //    Console.WriteLine($"B/32 text: '{s}' ({s.Length} characters)");
+            string base32 = null;
+            byte[] bytes2 = null;
 
-            //    var x1 = Base32Core.FromBase32String(s);
-            //    Console.WriteLine($"bytes (2): '{BitConverter.ToString(x1)}' ({x1.Length} bytes)");
+            var encodeTime = ExecutionTimings.Measure(() => { base32 = Base32Core.ToBase32String(bytes1); }).TotalMilliseconds;
 
-            //    var equality = x.SequenceEqual(x1) ? "equal" : "not equal";
-            //    Console.WriteLine($"bytes (2) are {equality} to bytes (1)");
-            //}
+            var slength = base32.Length;
+
+            File.WriteAllText("C:\\1.base32", base32);
+
+            var decodeTime = ExecutionTimings.Measure(() => { bytes2 = Base32Core.FromBase32String(base32); }).TotalMilliseconds;
+
+            if (report) {
+
+                Console.WriteLine($"{length1} bytes encoded in {encodeTime} ms: {encodeTime / (1.0 * length1 / (1024 * 1024))} ms/MB");
+                Console.WriteLine($"{slength} characters decoded in {decodeTime} ms: {decodeTime / (1.0 * slength / (1024 * 1024))} ms/MB");
+
+                Console.WriteLine($"{length1} bytes encoded in {encodeTime} ms: {encodeTime / (1.0 * length1 / (1024 * 1024 * 1024))} ms/GB");
+                Console.WriteLine($"{slength} characters decoded in {decodeTime} ms: {decodeTime / (1.0 * slength / (1024 * 1024 * 1024))} ms/GB");
+            }
+
+            File.WriteAllBytes("C:\\1.output", bytes2);
+
+            var isok = bytes1.SequenceEqual(bytes2);
+
+            Console.WriteLine($"Encode/decode is consistent: {isok}");
+        }
+
+        private static void CharArrayingTest()
+        {
+            const int MBYTE = 1024 * 1024;
+            const int SAMPLE = 128 * MBYTE;
+
+            var l = new List<char>();
+
+            var t1 = ExecutionTimings.Measure(() => {
+                for (int i = 0; i < SAMPLE; i++)
+                    l.Add((char)(i + '0'));
+            }).TotalMilliseconds;
+
+            var t2 = ExecutionTimings.Measure(() => { var array = l.ToArray(); }).TotalMilliseconds;
+
+            Console.WriteLine($"{SAMPLE} characters collected in {t1} ms: {t1 / (1.0 * SAMPLE / (1024 * 1024))} ms/MB");
+            Console.WriteLine($"{SAMPLE} characters arrayed in {t2} ms: {t2 / (1.0 * SAMPLE / (1024 * 1024))} ms/MB");
         }
 
         static unsafe void DoWithData(byte[] input)

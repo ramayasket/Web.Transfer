@@ -38,6 +38,17 @@ namespace Web.Transfer.Tests
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
+        public void Add3()
+        {
+            var block = new Block();
+
+            block.AddCode('a', false);
+            block.AddCode('a', false);
+            block.AddCode('0', false);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void Add4()
         {
             var block = new Block();

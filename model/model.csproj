@@ -69,7 +69,16 @@
       <Link>Properties\Version.cs</Link>
     </Compile>
     <Compile Include="Base32\Base32Core.cs" />
-    <Compile Include="Base32\Base32Core.Data.cs">
+    <Compile Include="Base32\Base32Core.Decode.cs">
+      <DependentUpon>Base32Core.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Base32\Base32Core.DecodePipe.cs">
+      <DependentUpon>Base32Core.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Base32\Base32Core.Encode.cs">
+      <DependentUpon>Base32Core.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Base32\Base32Core.Internals.cs">
       <DependentUpon>Base32Core.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfidentialConverter.cs" />
