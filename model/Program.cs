@@ -35,10 +35,114 @@ namespace model
 
         static void Main(string[] args)
         {
+            MemoryEncodeStreaming();
+            //TransformationModel();
             //CharArrayingTest();
-            SplitStringDecodeTest();
-            GrossTest();
-            MiddleTest();
+            //SplitStringDecodeTest();
+            //GrossTest();
+            //MiddleTest();
+        }
+
+        private static void MemoryEncodeStreaming()
+        {
+            Console.WriteLine("Starting \"to\" transform...");
+
+            var BUFFER_SIZE = 1024 * 256;
+            var sourceData = new byte[BUFFER_SIZE];
+
+            for (int i = 0; i < BUFFER_SIZE; i++) {
+                sourceData[i] = (byte) i;
+            }
+
+            Console.WriteLine("Writing to source stream");
+
+            using (var source = new MemoryStream()) {
+
+                source.Write(sourceData, 0, BUFFER_SIZE);
+                source.Seek(0, SeekOrigin.Begin);
+
+                using (var target = new MemoryStream()) {
+
+                    using (var encodingStream = new Base32EncodingStream(target)) {
+
+                        var buffer = new byte[1024];
+
+                        var total = StreamHelper.ReadAndWriteAll(source, encodingStream, buffer);
+                        Console.WriteLine($@"Total number of bytes read/encoded is {total}");
+                    }
+
+                    target.Seek(0, SeekOrigin.Begin);
+                    var targetData = target.GetBuffer();
+
+                    var encoded = Encoding.UTF8.GetString(targetData);
+
+                    var checkData = Base32Core.FromBase32String(encoded);
+
+                    var isok = checkData.SequenceEqual(sourceData);
+                }
+            }
+
+            //source.Write();
+
+            //using (var inputStream = File.OpenRead(INPUT)) {
+
+            //    using (var outputStream = File.OpenWrite(BASE32)) {
+
+            //        using (var encodingStream = new Base32EncodingStream(outputStream)) {
+
+            //            var total = StreamHelper.ReadAndWriteAll(inputStream, encodingStream, buffer);
+            //            Console.WriteLine($@"Total number of bytes read/deflated is {total}");
+            //        }
+            //    }
+            //}
+        }
+
+        private static void DecodeStreaming()
+        {
+            string BASE32 = TestData.testpath("base32");
+            string OUTPUT = TestData.testpath("output");
+
+            Console.WriteLine("Starting \"from\" transform...");
+
+            var BUFFER_SIZE = 1024;
+            var buffer = new byte[BUFFER_SIZE];
+
+            using (var inputStream = File.OpenRead(BASE32)) {
+
+                using (var outputStream = File.OpenWrite(OUTPUT)) {
+
+                    using (var decodingStream = new Base32DecodingStream(outputStream)) {
+
+                        var total = StreamHelper.ReadAndWriteAll(inputStream, decodingStream, buffer);
+                        Console.WriteLine($@"Total number of bytes read/decoded is {total}");
+                    }
+                }
+            }
+        }
+
+        private static void EncodeStreaming()
+        {
+            string INPUT = TestData.testpath("input");
+            string BASE32 = TestData.testpath("base32");
+
+            TestData.Cleanup();
+
+            Console.WriteLine("Starting \"to\" transform...");
+
+            var BUFFER_SIZE = 1024;
+            var buffer = new byte[BUFFER_SIZE];
+
+            using (var inputStream = File.OpenRead(INPUT)) {
+
+                using (var outputStream = File.OpenWrite(BASE32)) {
+
+                    using (var encodingStream = new Base32EncodingStream(outputStream)) {
+
+                        var total = StreamHelper.ReadAndWriteAll(inputStream, encodingStream, buffer);
+                        Console.WriteLine($@"Total number of bytes read/encoded is {total}");
+                    }
+                }
+            }
         }
 
         private static void SplitStringDecodeTest()

@@ -58,6 +58,7 @@ namespace model
             //// Step 3: Convert encrypted bytes to confidential string to be transferred.
             ////
             my_confidential = Base32Core.ToBase32String(my_secret);
+            File.WriteAllText("C:\\1.confidential", my_confidential);
 
             ////
             //// TRANSFER CONFIDENTIAL STRING OVER INTERNET.

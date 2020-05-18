@@ -20,9 +20,10 @@ using System.Reflection;
     16.05.2020   0.0.2.0        Base-32 decoding done
     17.05.2020   0.0.3.0        Base-32 decode pipes
     18.05.2020   0.0.4.0        Randomized cutoffs
+    18.05.2020   0.0.5.0        Encoding and decoding streams + tests
 */
 
-[assembly: AssemblyVersion("0.0.4.0")]
+[assembly: AssemblyVersion("0.0.5.0")]
 
 [assembly: AssemblyProduct("Web Transfer Protocol (WTP)")]
 [assembly: AssemblyCompany("Andrei Samoylov")]
