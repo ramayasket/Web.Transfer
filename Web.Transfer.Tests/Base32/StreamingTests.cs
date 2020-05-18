@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,8 @@ namespace Web.Transfer.Tests.Base32
     /// Tests Base-32 encoding and decoding streams.
     /// </summary>
     [TestClass]
-    public class StreamingTest
+    [ExcludeFromCodeCoverage]
+    public class StreamingTests
     {
         private const int BUFFER_SIZE = 20000; // buffer size must be multiple of 5 so that we have no cutoff blocks.
         private byte[] _sampleBytes;

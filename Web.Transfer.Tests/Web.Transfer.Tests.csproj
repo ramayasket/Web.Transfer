@@ -62,7 +62,7 @@
     <Compile Include="..\etc\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
-    <Compile Include="Base32\StreamingTest.cs" />
+    <Compile Include="Base32\StreamingTests.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Base32\CoreTests.cs" />
     <Compile Include="Base32\DecodePipeTests.cs" />
