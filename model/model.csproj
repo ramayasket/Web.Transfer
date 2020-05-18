@@ -52,8 +52,8 @@
     <Reference Include="ICSharpCode.SharpZipLib, Version=1.2.0.246, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.1.2.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Kw.Common, Version=1.2.0.0, Culture=neutral, PublicKeyToken=0368a69deeef33dd, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kw.Common.1.2.0\lib\net47\Kw.Common.dll</HintPath>
+    <Reference Include="Kw.Common, Version=1.2.1.0, Culture=neutral, PublicKeyToken=0368a69deeef33dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Kw.Common.1.2.1\lib\net47\Kw.Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -72,16 +72,13 @@
     <Compile Include="Base32\Base32Core.Decode.cs">
       <DependentUpon>Base32Core.cs</DependentUpon>
     </Compile>
-    <Compile Include="Base32\Base32Core.DecodePipe.cs">
-      <DependentUpon>Base32Core.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Base32\Base32DecodePipe.cs" />
     <Compile Include="Base32\Base32Core.Encode.cs">
       <DependentUpon>Base32Core.cs</DependentUpon>
     </Compile>
     <Compile Include="Base32\Base32Core.Internals.cs">
       <DependentUpon>Base32Core.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConfidentialConverter.cs" />
     <Compile Include="Crypto\RijndaelParameters.cs" />
     <Compile Include="Crypto\RijndaelStreamedCrypting.cs" />
     <Compile Include="Program.CryptoStreaming.cs">

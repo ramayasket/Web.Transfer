@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 /*
     Version scheme as of 1.5.2020:
@@ -18,9 +19,10 @@
     16.05.2020   0.0.1.0        Base-32 encoding done
     16.05.2020   0.0.2.0        Base-32 decoding done
     17.05.2020   0.0.3.0        Base-32 decode pipes
+    18.05.2020   0.0.4.0        Randomized cutoffs
 */
 
-[assembly: AssemblyVersion("0.0.3.0")]
+[assembly: AssemblyVersion("0.0.4.0")]
 
 [assembly: AssemblyProduct("Web Transfer Protocol (WTP)")]
 [assembly: AssemblyCompany("Andrei Samoylov")]
@@ -34,6 +36,7 @@ namespace Web.Transfer
     /// <summary>
     /// Product's public key.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     internal class PublicKey
     {
         /// <summary/>

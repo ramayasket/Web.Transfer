@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using model.Crypto;
 using Kw.Common;
+using model.Base32;
 
 namespace model
 {
@@ -56,17 +57,7 @@ namespace model
             ////
             //// Step 3: Convert encrypted bytes to confidential string to be transferred.
             ////
-            try
-            {
-                my_confidential = my_secret.ToConfidentialString();
-                var verify = Convert.FromBase64String(my_confidential);
-                throw new InvalidOperationException("Confidential string is Base64-compatible");
-            }
-            catch (FormatException x)
-            {
-                Console.WriteLine("Confidential string is protected against Base64");
-                File.WriteAllText("C:\\1.confidential", my_confidential);
-            }
+            my_confidential = Base32Core.ToBase32String(my_secret);
 
             ////
             //// TRANSFER CONFIDENTIAL STRING OVER INTERNET.
@@ -83,7 +74,7 @@ namespace model
             ////
             //// Step 4: Convert confidential string to encrypted bytes.
             ////
-            var my_secret2 = my_transferred.FromConfidentialString();
+            var my_secret2 = Base32Core.FromBase32String(my_transferred);
             File.WriteAllBytes("C:\\1.secret2", my_secret2);
 
             Console.WriteLine($"Confidential conversion OK: {my_secret.SequenceEqual(my_secret2)}");

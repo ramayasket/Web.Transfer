@@ -40,12 +40,5 @@ namespace model.Base32
 
             return FromBase32StringInternal(input);
         }
-
-        /// <summary>
-        /// Creates a <seealso cref="DecodePipe"/> to decode Base-32 string that has been cut to fragments.
-        /// </summary>
-        /// <param name="handler">A handler to receive decoded data.</param>
-        /// <returns>A <seealso cref="DecodePipe"/> object.</returns>
-        public static DecodePipe CreateDecodePipe(Action<byte[]> handler) => new DecodePipe(handler);
     }
 }

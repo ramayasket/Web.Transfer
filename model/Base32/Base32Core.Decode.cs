@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace model.Base32
@@ -30,15 +31,17 @@ namespace model.Base32
                     if (0 == _codeLength)
                         return 0;
 
+                    if(!Finished)
+                        throw new InvalidOperationException("The block is not finished and has no valid data length");
+                    
                     if (IsCutoff) {
                         return
                             (_codeLength == 3) ? 1 :
                             (_codeLength == 5) ? 2 :
-                            (_codeLength == 6) ? 3 :
-                            (_codeLength == 8) ? 4 : throw new InvalidOperationException("Incorrect cutoff block length");
+                            (_codeLength == 6) ? 3 : 4;
                     }
                     else
-                        return (_codeLength == 8) ? 5 : throw new InvalidOperationException("Incorrect native block length");
+                        return 5;
                 }
             }
 
@@ -73,7 +76,7 @@ namespace model.Base32
                 if (Finished)
                     throw new InvalidOperationException("Adding code to finished block");
 
-                if (CUTOFF == code)
+                if (IsCutoffCharacter(code))
                 {
                     _cutoffIndex = _codeLength;
 
@@ -105,7 +108,7 @@ namespace model.Base32
 
         const string DECODE_ERROR_MESSAGE = "The input was not made by converting byte array into Base-32 string";
 
-        private static bool BlockMarkup(ref DecodingBlock current, List<DecodingBlock> accumulator, string input, bool finalize)
+        internal static bool MarkupBlocks(ref DecodingBlock current, List<DecodingBlock> accumulator, string input, bool finalize)
         {
             var inputLength = input.Length;
 
@@ -140,17 +143,17 @@ namespace model.Base32
             return accumulator.Any();
         }
 
-        private static unsafe byte[] FromBase32StringInternal(string input)
+        private static byte[] FromBase32StringInternal(string input)
         {
             var accumulator = new List<DecodingBlock>();
             var current = new DecodingBlock();
 
-            BlockMarkup(ref current, accumulator, input, true);
+            MarkupBlocks(ref current, accumulator, input, true);
 
             return DecodeBlockSequence(input, accumulator);
         }
 
-        private static unsafe byte[] DecodeBlockSequence(string input, List<DecodingBlock> accumulator)
+        internal static unsafe byte[] DecodeBlockSequence(string input, List<DecodingBlock> accumulator)
         {
             var dataLength = accumulator.Sum(x => x.DataLength);
             var blocks = accumulator.Count;
@@ -168,6 +171,8 @@ namespace model.Base32
 
                         var pcode = (code + codeOffset);
                         var block = accumulator[i];
+
+                        Debug.Assert(block.Finished);
 
                         var imprinted = DecodeBlock(pcode, block);
 
@@ -189,12 +194,11 @@ namespace model.Base32
             ulong receptor = 0; // receives imprinted 
             var imprintOffset = 0;
 
-            for (int i = 0; i < block.CodeLength; i++)
-            {
+            for (int i = 0; i < block.CodeLength; i++) {
 
                 var code = *(codeBuffer + i);
 
-                if (CUTOFF == code)
+                if (IsCutoffCharacter(code))
                     continue;
 
                 var data = DecodeTable[code];

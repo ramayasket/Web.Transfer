@@ -65,7 +65,7 @@ namespace model.Base32
 
                 if (bits < ENCODING_BITS)
                 {
-                    output[ox++] = CUTOFF;
+                    output[ox++] = MakeCutoffCharacter();
                 }
 
                 output[ox++] = encoded;

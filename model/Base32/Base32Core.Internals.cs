@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Kw.Common;
 
 namespace model.Base32
 {
@@ -24,6 +27,7 @@ namespace model.Base32
         ////   5        0        0            0            0                 0                 1        8            8
         ////
 
+        [ExcludeFromCodeCoverage]
         internal readonly struct ArrayEncodingParameters
         {
             /// <summary> Number of native blocks. </summary>
@@ -69,6 +73,11 @@ namespace model.Base32
         /// <summary>
         /// Conversion table from <seealso cref="int"/> (as array index) into <seealso cref="char"/>.
         /// </summary>
+        /// <remarks>
+        /// Characters '0', '7', '8', '9' are used as cutoff indicators.
+        /// This produces encoding table of 36 characters (not a power of two)
+        /// which is to further delay attempts to break the encoding
+        /// </remarks>
         internal static readonly char[] EncodeTable = {
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
             'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
@@ -77,9 +86,19 @@ namespace model.Base32
         };
 
         /// <summary>
+        /// Possible cutoff characters randomly selected when needed.
+        /// </summary>
+        internal static readonly char[] CutoffTable = { '0', '7', '8', '9' };
+
+        /// <summary>
         /// Conversion dictionary from <seealso cref="char"/> (as key) into <seealso cref="byte"/>.
         /// </summary>
         internal static readonly Dictionary<char, byte> DecodeTable;
+
+        /// <summary>
+        /// Generates a random index into the array of possible cutoff characters: { '0', '7', '8', '9' }.
+        /// </summary>
+        internal static readonly Randomizer<int> CutoffRandomizer = new Randomizer<int>(0, 4);
 
         /// <summary>
         /// Initializes decode table.
@@ -123,11 +142,6 @@ namespace model.Base32
         };
 
         /// <summary>
-        /// Cut-off character indicates byte sequence shorter than 5.
-        /// </summary>
-        internal const char CUTOFF = '0';
-
-        /// <summary>
         /// Number of bits per encoding character.
         /// </summary>
         internal const int ENCODING_BITS = 5;
@@ -149,7 +163,7 @@ namespace model.Base32
         /// <param name="pFrom">Source address.</param>
         /// <param name="pTo">Destination address.</param>
         /// <param name="length">Number of bytes to copy.</param>
-        private static unsafe void Copy(byte* pFrom, byte* pTo, int length)
+        internal static unsafe void Copy(byte* pFrom, byte* pTo, int length)
         {
             for (int i = 0; i < length; i++)
                 *(pTo + i) = *(pFrom + i);
@@ -160,12 +174,39 @@ namespace model.Base32
         /// </summary>
         /// <param name="c">Character to verify.</param>
         /// <returns>True for valid character, False otherwise.</returns>
-        private static bool IsEncodeCharacter(char c)
+        internal static bool IsEncodeCharacter(char c)
         {
-            if ((c >= 'a' && c <= 'z') || (c >= '1' && c <= '6') || c == CUTOFF)
+            if ((c >= 'a' && c <= 'z') || (c >= '1' && c <= '6') || IsCutoffCharacter(c))
                 return true;
 
             return false;
+        }
+
+        /// <summary>
+        /// Verifies that given character is a valid Base-32 cutoff character.
+        /// </summary>
+        /// <param name="c">Character to verify.</param>
+        /// <returns>True for valid character, False otherwise.</returns>
+        internal static bool IsCutoffCharacter(char c)
+        {
+            if ((c >= '7' && c <= '9') || c == '0')
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns randomly selected cutoff character.
+        /// </summary>
+        /// <returns>
+        /// An integer index into <seealso cref="CutoffTable"/>.
+        /// </returns>
+        internal static char MakeCutoffCharacter()
+        {
+            var x = CutoffRandomizer.Next();
+            var y = CutoffTable[x];
+
+            return y;
         }
     }
 }
