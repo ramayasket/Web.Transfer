@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 
 namespace model
 {
+    [ExcludeFromCodeCoverage]
     public static class TestData
     {
         public const string TEST_DIRECTORY = "C:\\";

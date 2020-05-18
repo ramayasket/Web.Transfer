@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using ICSharpCode.SharpZipLib.Core;
@@ -6,6 +7,7 @@ using ICSharpCode.SharpZipLib.Zip;
 
 namespace model
 {
+    [ExcludeFromCodeCoverage]
     public static class ZipEncoder
     {
         private const string ENTRY = "0";

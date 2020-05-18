@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace model.Crypto
     /// <remarks>
     /// At the time of inception of this class it is not decided should these bytes be permanent or transient for a while.
     /// </remarks>
+    [ExcludeFromCodeCoverage]
     public class RijndaelParameters
     {
         /// <summary> Key size in bits. </summary>
