@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace model.Base32
+namespace Web.Transfer.Base32
 {
     /// <summary>
     /// A FIFO pipe to decode Base-32 string that has been cut to fragments.

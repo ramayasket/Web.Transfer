@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 
 using Kw.Common;
 
-namespace model.Crypto
+namespace Web.Transfer.Crypto
 {
     /// <summary>
     /// Provides stream-based AES (Rijndael) encryption/decryption.

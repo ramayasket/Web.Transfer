@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace model.Base32
+namespace Web.Transfer.Base32
 {
     public partial class Base32Core
     {

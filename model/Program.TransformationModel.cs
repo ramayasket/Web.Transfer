@@ -2,9 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using model.Crypto;
 using Kw.Common;
-using model.Base32;
+using Web.Transfer.Base32;
 
 namespace model
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using model.Base32;
+using Web.Transfer.Base32;
 
 namespace Web.Transfer.Tests.Base32
 {

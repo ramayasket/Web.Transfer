@@ -5,8 +5,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using model.Crypto;
-using model.Helpers;
+using Kw.Common;
+using Web.Transfer.Crypto;
+using Web.Transfer.Helpers;
 
 namespace model
 {
@@ -37,7 +38,7 @@ namespace model
 
                     using (var crypting = new RijndaelStreamedCrypting(outputStream, "Zlp!", CryptoStreamMode.Write))
                     {
-                        var total = StreamHelper.ReadAndWriteAll(inputStream, crypting.CryptoStream, buffer);
+                        var total = StreamHelper.PumpAll(inputStream, crypting.CryptoStream, buffer);
                         Console.WriteLine($@"Total number of bytes read is {total}");
                     }
                 }
@@ -54,7 +55,7 @@ namespace model
                 {
                     using (var crypting = new RijndaelStreamedCrypting(inputStream, "Zlp!", CryptoStreamMode.Read))
                     {
-                        var total = StreamHelper.ReadAndWriteAll(crypting.CryptoStream, outputStream, buffer);
+                        var total = StreamHelper.PumpAll(crypting.CryptoStream, outputStream, buffer);
                         Console.WriteLine($@"Total number of bytes written is {total}");
                     }
                     //using (var inflater = new SingularInflater(inputStream))

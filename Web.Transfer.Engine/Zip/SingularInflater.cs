@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Zip;
 
-namespace model.Zip
+namespace Web.Transfer.Zip
 {
     [ExcludeFromCodeCoverage]
     public class SingularInflater : ZipFile

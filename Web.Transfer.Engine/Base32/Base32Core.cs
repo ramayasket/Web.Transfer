@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace model.Base32
+namespace Web.Transfer.Base32
 {
     /// <summary>
     /// Base-32 encoding and decoding.

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
-using model.Helpers;
-using model.Zip;
+using Kw.Common;
+using Web.Transfer.Helpers;
+using Web.Transfer.Zip;
 
 namespace model
 {
@@ -26,7 +27,7 @@ namespace model
                 {
                     using (var zipStream = new SingularDeflaterStream(outputStream, "Zlp!"))
                     {
-                        var total = StreamHelper.ReadAndWriteAll(inputStream, zipStream, buffer);
+                        var total = StreamHelper.PumpAll(inputStream, zipStream, buffer);
                         Console.WriteLine($@"Total number of bytes read/deflated is {total}");
                     }
                 }
@@ -44,7 +45,7 @@ namespace model
                     {
                         using (var inflaterStream = inflater.InputStream)
                         {
-                            var total = StreamHelper.ReadAndWriteAll(inflaterStream, outputStream, buffer);
+                            var total = StreamHelper.PumpAll(inflaterStream, outputStream, buffer);
                             Console.WriteLine($@"Total number of bytes read/inflated is {total}");
                         }
                     }

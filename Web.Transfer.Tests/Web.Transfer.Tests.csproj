@@ -46,8 +46,8 @@
     <AssemblyOriginatorKeyFile>..\etc\Web.Transfer.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Kw.Common, Version=1.2.1.0, Culture=neutral, PublicKeyToken=0368a69deeef33dd, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kw.Common.1.2.1\lib\net47\Kw.Common.dll</HintPath>
+    <Reference Include="Kw.Common, Version=1.2.2.0, Culture=neutral, PublicKeyToken=0368a69deeef33dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Kw.Common.1.2.2\lib\net47\Kw.Common.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.2.1.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
@@ -73,12 +73,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\model\model.csproj">
-      <Project>{0b74ddec-6740-488e-808c-9942d0aa6f86}</Project>
-      <Name>model</Name>
+    <ProjectReference Include="..\Web.Transfer.Engine\Web.Transfer.Engine.csproj">
+      <Project>{ba299f1f-1944-4065-8165-c09dcc3f9acb}</Project>
+      <Name>Web.Transfer.Engine</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

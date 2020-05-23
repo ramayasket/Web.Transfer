@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace model.Base32
+namespace Web.Transfer.Base32
 {
     public partial class Base32Core
     {

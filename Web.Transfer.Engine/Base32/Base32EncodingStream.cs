@@ -5,23 +5,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace model.Base32
+namespace Web.Transfer.Base32
 {
     /// <summary>
-    /// A stream which Base32-decode data and writes the output to the underlying stream.
+    /// A stream which Base32-encode data and writes the output to the underlying stream.
     /// </summary>
-    public class Base32DecodingStream : Stream
+    public class Base32EncodingStream : Stream
     {
         private const string NOT_SUPPORTED_MESSAGE = "The stream does not support this operation";
 
         private readonly Stream _underlyingStream;
-        private readonly Base32DecodePipe _decodePipe;
 
         /// <summary>
-        /// Initializes a new instance of the <seealso cref="Base32DecodingStream"/> class using <seealso cref="Stream"/> object to write encoded string to.
+        /// Initializes a new instance of the <seealso cref="Base32EncodingStream"/> class using <seealso cref="Stream"/> object to write encoded string to.
         /// </summary>
         /// <param name="underlyingStream">The <seealso cref="Stream"/> object to write encoded string to. Must support writing.</param>
-        public Base32DecodingStream(Stream underlyingStream)
+        public Base32EncodingStream(Stream underlyingStream)
         {
             if(null == underlyingStream)
                 throw new ArgumentNullException(nameof(underlyingStream));
@@ -30,12 +29,6 @@ namespace model.Base32
                 throw new ArgumentException("The underlying stream must support writing");
 
             _underlyingStream = underlyingStream;
-            _decodePipe = new Base32DecodePipe(OnDecodedData);
-        }
-
-        private void OnDecodedData(byte[] data)
-        {
-            _underlyingStream.Write(data, 0, data.Length);
         }
 
         /// <inheritdoc />
@@ -44,19 +37,17 @@ namespace model.Base32
             var bytes = new byte[count];
             Array.Copy(buffer, offset, bytes, 0, count);
 
-            var encoded = Encoding.UTF8.GetString(bytes);
+            var encoded = Base32Core.ToBase32String(bytes);
+            var encodedBytes = Encoding.UTF8.GetBytes(encoded);
 
-            _decodePipe.FeedFragment(encoded);
+            _underlyingStream.Write(encodedBytes, 0, encodedBytes.Length);
         }
 
         /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
-            if (disposing) {
-
+            if(disposing)
                 _underlyingStream.Flush();
-                _decodePipe.Dispose();
-            }
 
             base.Dispose(disposing);
         }

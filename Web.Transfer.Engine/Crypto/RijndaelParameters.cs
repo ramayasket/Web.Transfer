@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace model.Crypto
+namespace Web.Transfer.Crypto
 {
     /// <summary>
     /// Defines salt and IV bytes (static rather than newly-generated each time).

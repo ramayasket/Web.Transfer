@@ -3,9 +3,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Kw.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using model.Base32;
-using model.Helpers;
+using Web.Transfer.Base32;
+using Web.Transfer.Helpers;
 
 namespace Web.Transfer.Tests.Base32
 {
@@ -16,7 +17,12 @@ namespace Web.Transfer.Tests.Base32
     [ExcludeFromCodeCoverage]
     public class StreamingTests
     {
-        private const int BUFFER_SIZE = 20000; // buffer size must be multiple of 5 so that we have no cutoff blocks.
+        ////
+        //// Buffer size must be multiple of 5 so that we have no cutoff blocks.
+        //// Because of randomized cutoffs, verifying encoded string with cutoffs would become unreasonably difficult.
+        //// Since this class tests streams and not encoding/decoding functionality itself,
+        //// this 
+        private const int BUFFER_SIZE = 20000;
         private byte[] _sampleBytes;
         private string _sampleString;
 
@@ -45,7 +51,7 @@ namespace Web.Transfer.Tests.Base32
                     using (var encodingStream = new Base32EncodingStream(target)) {
 
                         var buffer = new byte[1000]; // also must be multiple of 5
-                        StreamHelper.ReadAndWriteAll(source, encodingStream, buffer);
+                        StreamHelper.PumpAll(source, encodingStream, buffer);
                     }
 
                     target.Seek(0, SeekOrigin.Begin);
@@ -58,6 +64,34 @@ namespace Web.Transfer.Tests.Base32
 
                     Assert.AreEqual(encoded, _sampleString);
                     Assert.IsTrue(checkData.SequenceEqual(_sampleBytes));
+                }
+            }
+        }
+
+        [TestMethod]
+        public void StreamedDecoding()
+        {
+            using (var source = new MemoryStream()) {
+
+                var sourceBytes = Encoding.UTF8.GetBytes(_sampleString);
+
+                source.Write(sourceBytes, 0, sourceBytes.Length);
+                source.Seek(0, SeekOrigin.Begin);
+
+                using (var target = new MemoryStream()) {
+
+                    using (var decodingStream = new Base32DecodingStream(target)) {
+
+                        var buffer = new byte[1024];
+                        StreamHelper.PumpAll(source, decodingStream, buffer);
+                    }
+
+                    target.Seek(0, SeekOrigin.Begin);
+
+                    var targetLength = Convert.ToInt32(target.Length);
+                    var targetData = target.GetBuffer().Take(targetLength).ToArray();
+
+                    Assert.IsTrue(targetData.SequenceEqual(_sampleBytes));
                 }
             }
         }
