@@ -79,6 +79,14 @@ namespace Web.Transfer
                 return;
             }
 
+            try {
+                _password = AppConfig.RequiredSetting("Password");
+            }
+            catch (Exception x) {
+                Console.WriteLine(x.Message);
+                return;
+            }
+
             var fileInfo = new FileInfo(fileName);
             _bytesTotal = fileInfo.Length;
 
@@ -96,6 +104,11 @@ namespace Web.Transfer
 
         private const int BUFFER_SIZE = 1024 * 1024;
         private static readonly byte[] _buffer = new byte[BUFFER_SIZE];
+
+        private static long _bytesPumped = 0;
+        private static long _bytesTotal = 0;
+
+        private static string _password;
 
         static void ConvertToProtocol(string source, string target)
         {
@@ -117,9 +130,6 @@ namespace Web.Transfer
             Console.WriteLine(ok ? "Conversion complete" : "Conversion failed");
         }
 
-        private static long _bytesPumped = 0;
-        private static long _bytesTotal = 0;
-
         static void PumpIntervention(int pumped)
         {
             _bytesPumped += pumped;
@@ -131,7 +141,7 @@ namespace Web.Transfer
         {
             try {
                 using (var base32Decoder = new Base32DecodingReadStream(readStream)) {
-                    using (var cryptoDecoder = new RijndaelStreamedCrypting(base32Decoder, "zlp", CryptoStreamMode.Read)) {
+                    using (var cryptoDecoder = new RijndaelStreamedCrypting(base32Decoder, _password, CryptoStreamMode.Read)) {
 
                         StreamHelper.PumpAll(cryptoDecoder.CryptoStream, writeStream, _buffer, PumpIntervention);
                         Console.WriteLine("success");
@@ -149,7 +159,7 @@ namespace Web.Transfer
         {
             try {
                 using (var base32Encoder = new Base32EncodingStream(writeStream)) {
-                    using (var cryptoEncoder = new RijndaelStreamedCrypting(base32Encoder, "zlp", CryptoStreamMode.Write)) {
+                    using (var cryptoEncoder = new RijndaelStreamedCrypting(base32Encoder, _password, CryptoStreamMode.Write)) {
                         StreamHelper.PumpAll(readStream, cryptoEncoder.CryptoStream, _buffer, PumpIntervention);
                         Console.WriteLine("success");
                         return true;
