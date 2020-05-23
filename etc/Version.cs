@@ -25,7 +25,7 @@ using System.Reflection;
     23.05.2020   1.0.6.1        removed test exception )))
 */
 
-[assembly: AssemblyVersion("1.0.6.0")]
+[assembly: AssemblyVersion("1.0.6.1")]
 
 [assembly: AssemblyProduct("Web Transfer Protocol (WTP)")]
 [assembly: AssemblyCompany("Andrei Samoylov")]
