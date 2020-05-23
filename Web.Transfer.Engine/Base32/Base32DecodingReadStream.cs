@@ -74,9 +74,6 @@ namespace Web.Transfer.Base32
                 // go for a new portion
                 var inputCount = _underlyingStream.Read(_inputBuffer, 0, _inputBuffer.Length);
 
-                if(inputCount < _inputBuffer.Length)
-                    throw new InvalidOperationException("zlp!");
-
                 if (0 == inputCount) {
                     _endOfStream = true;
                     return 0;
