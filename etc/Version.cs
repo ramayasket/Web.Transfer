@@ -26,9 +26,10 @@ using System.Reflection;
     23.05.2020   1.0.6.2        Password in App.config
     24.05.2020   1.0.7.0        SharpZipLib replaced with GZipStream + BUG FIXED in Base32DecodingReadStream
     24.05.2020   1.0.7.1        wtpfile using all three streams: GZip, Crypto, Base32
+    24.05.2020   1.0.7.2        GZip excluded (for performance) + refactoring
 */
 
-[assembly: AssemblyVersion("1.0.7.1")]
+[assembly: AssemblyVersion("1.0.7.2")]
 
 [assembly: AssemblyProduct("Web Transfer Protocol (WTP)")]
 [assembly: AssemblyCompany("Andrei Samoylov")]

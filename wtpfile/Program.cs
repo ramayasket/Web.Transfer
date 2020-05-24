@@ -90,19 +90,34 @@ namespace Web.Transfer
             var fileInfo = new FileInfo(fileName);
             _bytesTotal = fileInfo.Length;
 
+            Func<Stream, Stream, bool> operation;
+            string direction;
+            string newFileName;
+
             if (WTP_EXTENSION == fileInfo.Extension.ToLower()) {
 
-                var newFileName = Path.GetFileNameWithoutExtension(fileName);
-                ConvertFromProtocol(fileName, newFileName);
+                newFileName = Path.GetFileNameWithoutExtension(fileName);
+                direction = "from";
+                operation = PumpConvertFromProtocol;
             }
             else {
 
-                var newFileName = fileName + WTP_EXTENSION;
-                ConvertToProtocol(fileName, newFileName);
+                newFileName = fileName + WTP_EXTENSION;
+                direction = "to";
+                operation = PumpConvertToProtocol;
             }
+
+            Console.WriteLine($"Converting '{fileName}' {direction} WTP format");
+            Console.WriteLine();
+
+            bool ok = false;
+
+            var t = ExecutionTimings.Measure(() => { ok = WithStreams(fileName, newFileName, operation); });
+
+            Console.WriteLine((ok ? "Conversion complete" : "Conversion failed") + $" {t}");
         }
 
-        private const int BUFFER_SIZE = 1024;
+        private const int BUFFER_SIZE = 1024 * 1024;
         private static readonly byte[] _buffer = new byte[BUFFER_SIZE];
 
         private static long _bytesPumped = 0;
@@ -110,31 +125,11 @@ namespace Web.Transfer
 
         private static string _password;
 
-        static void ConvertToProtocol(string source, string target)
-        {
-            Console.WriteLine($"Converting '{source}' to WTP format");
-            Console.WriteLine();
-
-            var ok = WithStreams(source, target, PumpConvertToProtocol);
-
-            Console.WriteLine(ok ? "Conversion complete" : "Conversion failed");
-        }
-
-        static void ConvertFromProtocol(string source, string target)
-        {
-            Console.WriteLine($"Converting '{source}' from WTP format");
-            Console.WriteLine();
-
-            var ok = WithStreams(source, target, PumpConvertFromProtocol);
-
-            Console.WriteLine(ok ? "Conversion complete" : "Conversion failed");
-        }
-
         static void PumpIntervention(int pumped)
         {
             _bytesPumped += pumped;
 
-            Console.Write($"\rPumped {_bytesPumped} bytes: ");
+            Console.Write($"\rPumped {_bytesPumped:##,###} bytes: ");
         }
 
         static bool PumpConvertFromProtocol(Stream readStream, Stream writeStream)
@@ -142,11 +137,9 @@ namespace Web.Transfer
             try {
                 using (var base32Decoder = new Base32DecodingReadStream(readStream)) {
                     using (var cryptoDecoder = new RijndaelStreamedCrypting(base32Decoder, _password, CryptoStreamMode.Read)) {
-                        using (var decompressStream = new GZipStream(cryptoDecoder.CryptoStream, CompressionMode.Decompress)) {
-                            StreamHelper.PumpAll(decompressStream, writeStream, _buffer, PumpIntervention);
-                            Console.WriteLine("success");
-                            return true;
-                        }
+                        StreamHelper.PumpAll(cryptoDecoder.CryptoStream, writeStream, _buffer, PumpIntervention);
+                        Console.WriteLine("success");
+                        return true;
                     }
                 }
             }
@@ -161,11 +154,9 @@ namespace Web.Transfer
             try {
                 using (var base32Encoder = new Base32EncodingStream(writeStream)) {
                     using (var cryptoEncoder = new RijndaelStreamedCrypting(base32Encoder, _password, CryptoStreamMode.Write)) {
-                        using (var compressStream = new GZipStream(cryptoEncoder.CryptoStream, CompressionMode.Compress)) {
-                            StreamHelper.PumpAll(readStream, compressStream, _buffer, PumpIntervention);
-                            Console.WriteLine("success");
-                            return true;
-                        }
+                        StreamHelper.PumpAll(readStream, cryptoEncoder.CryptoStream, _buffer, PumpIntervention);
+                        Console.WriteLine("success");
+                        return true;
                     }
                 }
             }
@@ -209,7 +200,15 @@ namespace Web.Transfer
         static Stream GuardedFileOpen(string f, bool write)
         {
             try {
-                var stream = write ? File.OpenWrite(f) : File.OpenRead(f);
+                Stream stream;
+
+                if (write) {
+                    File.Delete(f);
+                    stream = File.OpenWrite(f);
+                }
+                else
+                    stream = File.OpenRead(f);
+
                 var op = write ? "writing" : "reading";
                 Console.WriteLine($"File '{f}' opened for {op}");
                 return stream;

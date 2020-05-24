@@ -21,11 +21,33 @@ namespace model
     [ExcludeFromCodeCoverage]
     partial class Program
     {
+        static void GZipHelperTest()
+        {
+            const int BUFFER_SIZE = 20000;
+            byte[] sample;
+
+            sample = new byte[BUFFER_SIZE];
+
+            for (int i = 0; i < BUFFER_SIZE; i++) {
+                sample[i] = (byte)i;
+            }
+
+            var packed = sample.Pack();
+            var unpacked = packed.Unpack();
+
+            var ok = sample.SequenceEqual(unpacked);
+        }
+
         static void Main(string[] args)
         {
-            //TransformationModel();
-            //return;
+            long i = 12345678909876;
 
+            var s = $"{i:##,###}";
+
+            return;
+            
+            GZipHelperTest();
+            return;
 
             const string PASSWORD = "zlp";
 

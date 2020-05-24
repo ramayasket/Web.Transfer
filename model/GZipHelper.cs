@@ -19,8 +19,9 @@ namespace model
             using (var inputStream = new MemoryStream(input)) {
                 using (var outputStream = new MemoryStream()) {
                     using (var compressStream = new GZipStream(outputStream, CompressionMode.Compress)) {
-                        StreamHelper.PumpAll(inputStream, compressStream, buffer);
-                        //outputStream.Seek(0, SeekOrigin.Begin);
+                        //inputStream.CopyTo(compressStream);
+                        var x = StreamHelper.PumpAll(inputStream, compressStream, buffer);
+                        outputStream.Seek(0, SeekOrigin.Begin);
                         var output = outputStream.GetBuffer().Take((int) outputStream.Length).ToArray();
                         return output;
                     }
@@ -35,8 +36,9 @@ namespace model
             using (var inputStream = new MemoryStream(input)) {
                 using (var outputStream = new MemoryStream()) {
                     using (var decompressStream = new GZipStream(inputStream, CompressionMode.Decompress)) {
+                        //decompressStream.CopyTo(outputStream);
                         StreamHelper.PumpAll(decompressStream, outputStream, buffer);
-                        //outputStream.Seek(0, SeekOrigin.Begin);
+                        outputStream.Seek(0, SeekOrigin.Begin);
                         var output = outputStream.GetBuffer().Take((int)outputStream.Length).ToArray();
                         return output;
                     }
