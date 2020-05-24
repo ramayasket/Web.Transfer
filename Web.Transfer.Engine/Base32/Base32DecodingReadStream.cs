@@ -59,6 +59,7 @@ namespace Web.Transfer.Base32
         private void OnDecodedData(byte[] data)
         {
             Array.Copy(data, 0, _decodeBuffer, 0, data.Length);
+
             _decodeDataLength = data.Length;
             _decodeOffset = 0;
         }
@@ -86,7 +87,7 @@ namespace Web.Transfer.Base32
             var remainingLength = _decodeDataLength - _decodeOffset;
             var readingLength = Math.Min(remainingLength, count);
 
-            Array.Copy(_decodeBuffer, _decodeOffset, buffer, 0, readingLength);
+            Array.Copy(_decodeBuffer, _decodeOffset, buffer, offset, readingLength);
 
             _decodeOffset += readingLength;
 
@@ -96,8 +97,10 @@ namespace Web.Transfer.Base32
         /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing) {
+
                 _decodePipe.Dispose();
+            }
 
             base.Dispose(disposing);
         }

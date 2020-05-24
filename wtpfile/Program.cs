@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -11,7 +12,6 @@ using Kw.Common;
 using Web.Transfer.Base32;
 using Web.Transfer.Crypto;
 using Web.Transfer.Helpers;
-using Web.Transfer.Zip;
 
 namespace Web.Transfer
 {
@@ -102,7 +102,7 @@ namespace Web.Transfer
             }
         }
 
-        private const int BUFFER_SIZE = 1024 * 1024;
+        private const int BUFFER_SIZE = 1024;
         private static readonly byte[] _buffer = new byte[BUFFER_SIZE];
 
         private static long _bytesPumped = 0;
@@ -141,12 +141,16 @@ namespace Web.Transfer
         {
             try {
                 using (var base32Decoder = new Base32DecodingReadStream(readStream)) {
-                    using (var cryptoDecoder = new RijndaelStreamedCrypting(base32Decoder, _password, CryptoStreamMode.Read)) {
-
-                        StreamHelper.PumpAll(cryptoDecoder.CryptoStream, writeStream, _buffer, PumpIntervention);
-                        Console.WriteLine("success");
-                        return true;
-                    }
+                    StreamHelper.PumpAll(base32Decoder, writeStream, _buffer, PumpIntervention);
+                    Console.WriteLine("success");
+                    return true;
+                    //using (var cryptoDecoder = new RijndaelStreamedCrypting(base32Decoder, _password, CryptoStreamMode.Read)) {
+                    //    StreamHelper.PumpAll(cryptoDecoder.CryptoStream, writeStream, _buffer, PumpIntervention);
+                    //    Console.WriteLine("success");
+                    //    return true;
+                    //    //using (var decompressStream = new GZipStream(cryptoDecoder.CryptoStream, CompressionMode.Decompress)) {
+                    //    //}
+                    //}
                 }
             }
             catch (Exception x) {
@@ -159,11 +163,16 @@ namespace Web.Transfer
         {
             try {
                 using (var base32Encoder = new Base32EncodingStream(writeStream)) {
-                    using (var cryptoEncoder = new RijndaelStreamedCrypting(base32Encoder, _password, CryptoStreamMode.Write)) {
-                        StreamHelper.PumpAll(readStream, cryptoEncoder.CryptoStream, _buffer, PumpIntervention);
-                        Console.WriteLine("success");
-                        return true;
-                    }
+                    StreamHelper.PumpAll(readStream, base32Encoder, _buffer, PumpIntervention);
+                    Console.WriteLine("success");
+                    return true;
+                    //using (var cryptoEncoder = new RijndaelStreamedCrypting(base32Encoder, _password, CryptoStreamMode.Write)) {
+                    //    StreamHelper.PumpAll(readStream, cryptoEncoder.CryptoStream, _buffer, PumpIntervention);
+                    //    Console.WriteLine("success");
+                    //    return true;
+                    //    //using (var compressStream = new GZipStream(cryptoEncoder.CryptoStream, CompressionMode.Compress)) {
+                    //    //}
+                    //}
                 }
             }
             catch (Exception x) {

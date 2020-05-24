@@ -24,9 +24,10 @@ using System.Reflection;
     23.05.2020   1.0.6.0        Web.Transfer.Engine + wtpfile + decoding read stream
     23.05.2020   1.0.6.1        removed test exception )))
     23.05.2020   1.0.6.2        Password in App.config
+    24.05.2020   1.0.7.0        Password in App.config
 */
 
-[assembly: AssemblyVersion("1.0.6.2")]
+[assembly: AssemblyVersion("1.0.7.0")]
 
 [assembly: AssemblyProduct("Web Transfer Protocol (WTP)")]
 [assembly: AssemblyCompany("Andrei Samoylov")]

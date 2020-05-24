@@ -46,8 +46,10 @@ namespace Web.Transfer.Base32
         /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
-            if(disposing)
+            if (disposing) {
+
                 _underlyingStream.Flush();
+            }
 
             base.Dispose(disposing);
         }

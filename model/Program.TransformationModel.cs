@@ -2,8 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using Kw.Common;
 using Web.Transfer.Base32;
+using Web.Transfer.Crypto;
+using Kw.Common;
 
 namespace model
 {
@@ -25,7 +26,7 @@ namespace model
         /// </remarks>
         internal static void TransformationModel()
         {
-            TestData.Cleanup();
+            //TestData.Cleanup();
 
             const string PASSWORD = "Деремнустах!";
 
@@ -42,13 +43,13 @@ namespace model
             ////
             //// Step 1: Pack input bytes by Zip.
             ////
-            var my_packed = my_input.Pack();
-            File.WriteAllBytes("C:\\1.packed", my_packed);
+            //var my_packed = my_input.Pack();
+            //File.WriteAllBytes("C:\\1.packed", my_packed);
 
             ////
             //// Step 2: Encrypt packed bytes with password.
             ////
-            var my_secret = RijndaelCrypting.Encrypt(my_packed, PASSWORD);
+            var my_secret = RijndaelEncryptorDecryptor.Encrypt(my_input, PASSWORD);
             File.WriteAllBytes("C:\\1.secret", my_secret);
 
             string my_confidential = null;
@@ -82,18 +83,15 @@ namespace model
             ////
             //// Step 5: Decrypt converted bytes with password.
             ////
-            var my_packed2 = RijndaelCrypting.Decrypt(my_secret2, PASSWORD);
-            File.WriteAllBytes("C:\\1.packed2", my_packed2);
-
-            Console.WriteLine($"Encryption/decryption OK: {my_packed.SequenceEqual(my_packed2)}");
+            var my_output = RijndaelEncryptorDecryptor.Decrypt(my_secret2, PASSWORD);
 
             ////
             //// Step 6: Unpack decrypted bytes to original data.
             ////
-            var my_output = my_packed2.Unpack();
             File.WriteAllBytes("C:\\1.output", my_output);
 
-            Console.WriteLine($"Packing/unpacking OK: {my_input.SequenceEqual(my_output)}");
+            Console.WriteLine($"Encrypting/decrypting OK: {my_input.SequenceEqual(my_output)}");
+
         }
     }
 }

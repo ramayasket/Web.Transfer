@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using ICSharpCode.SharpZipLib.Zip;
 using Kw.Common;
 using Web.Transfer.Base32;
 using Web.Transfer.Helpers;
@@ -20,56 +21,59 @@ namespace model
     [ExcludeFromCodeCoverage]
     partial class Program
     {
-        static readonly byte[][] _data =
-        {
-            //new byte[] { },
-            //new byte[] { 0xab },
-            //new byte[] { 0x80, 0x52 },
-            //new byte[] { 0x08, 0x00, 0x52 },
-            //new byte[] { 0x13, 0x01, 0x19, 0x68 },
-            //new byte[] { 0xab, 0x13, 0x01, 0x19, 0x68 },
-            new byte[] { 0xab, 0x13, 0x01, 0x19, 0x68, 0xba, 0x31, 0x10, 0x91, 0x86 },
-            new byte[] { 0xab, 0x13, 0x01, 0x19, 0x68, 0xba, 0x31, 0x10, 0x91, 0x86, 0xff },
-        };
-
-        private const int DATA_SIZE = 16;
-        private const int BUFFER_SIZE = 2048;
-        private static byte[] _sampleBytes;
-
         static void Main(string[] args)
         {
+            //TransformationModel();
+            //return;
+
+
             const string PASSWORD = "zlp";
 
-            var BUFFER_SIZE = 2048;
+            var BUFFER_SIZE = 1024;
             var buffer = new byte[BUFFER_SIZE];
 
-            //using (var inputStream = File.OpenRead("1.png")) {
-            //    using (var outputStream = File.OpenWrite("1.png.encrypted")) {
-            //        using (var crypting = new RijndaelStreamedCrypting(outputStream, PASSWORD, CryptoStreamMode.Write)) {
-            //            var total = StreamHelper.PumpAll(inputStream, crypting.CryptoStream, buffer);
-            //            Console.WriteLine($@"Total number of bytes read is {total}");
-            //        }
-            //    }
-            //}
+            string INPUT = TestData.testpath("input");
+            string WTP = TestData.testpath("wtp");
+            string OUTPUT = TestData.testpath("output");
 
+            var input = File.ReadAllBytes(INPUT);
 
-            //using (var inputStream = File.OpenRead("3.png.encrypted")) {
-            //    using (var outputStream = File.OpenWrite("2.png")) {
-            //        using (var crypting = new RijndaelStreamedCrypting(inputStream, PASSWORD, CryptoStreamMode.Read)) {
-            //            var total = StreamHelper.PumpAll(crypting.CryptoStream, outputStream, buffer);
-            //            Console.WriteLine($@"Total number of bytes written is {total}");
-            //        }
-            //    }
-            //}
+            TestData.Cleanup();
 
-            using (var inputStream = File.OpenRead("2.png.wtp")) {
-                using (var base32Decoder = new Base32DecodingReadStream(inputStream)) {
-                    using (var writeStream = File.OpenWrite("2.png.encrypted")) {
-                        var total = StreamHelper.PumpAll(base32Decoder, writeStream, buffer);
-                        Console.WriteLine($@"Total number of bytes written is {total}");
+            Console.WriteLine("Conversion to protocol");
+
+            using (var readStream = File.OpenRead(INPUT)) {
+                using (var writeStream = File.OpenWrite(WTP)) {
+                    using (var base32Encoder = new Base32EncodingStream(writeStream)) {
+                        using (var cryptoEncoder = new RijndaelStreamedCrypting(base32Encoder, PASSWORD, CryptoStreamMode.Write)) {
+                            using (var compressStream = new GZipStream(cryptoEncoder.CryptoStream, CompressionMode.Compress)) {
+                                StreamHelper.PumpAll(readStream, compressStream, buffer);
+                            }
+                            //StreamHelper.PumpAll(readStream, cryptoEncoder.CryptoStream, buffer);
+                        }
                     }
                 }
             }
+
+            Console.WriteLine("Conversion from protocol");
+
+            using (var readStream = File.OpenRead(WTP)) {
+                using (var writeStream = File.OpenWrite(OUTPUT)) {
+                    using (var base32Decoder = new Base32DecodingReadStream(readStream)) {
+                        using (var cryptoDecoder = new RijndaelStreamedCrypting(base32Decoder, PASSWORD, CryptoStreamMode.Read)) {
+                            //StreamHelper.PumpAll(cryptoDecoder.CryptoStream, writeStream, buffer);
+                            using (var decompressStream = new GZipStream(cryptoDecoder.CryptoStream, CompressionMode.Decompress)) {
+                                StreamHelper.PumpAll(decompressStream, writeStream, buffer);
+                            }
+                        }
+                    }
+                }
+            }
+
+            var output = File.ReadAllBytes(OUTPUT);
+            var isok = input.SequenceEqual(output);
+
+            Console.WriteLine($"Conversion to/from: {isok}");
         }
 
         private static void SplitStringDecodeTest()

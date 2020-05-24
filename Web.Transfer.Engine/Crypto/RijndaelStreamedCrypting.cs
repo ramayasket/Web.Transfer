@@ -40,9 +40,6 @@ namespace Web.Transfer.Crypto
             if(string.IsNullOrWhiteSpace(password))
                 throw new ArgumentNullException(nameof(password));
 
-            if(mode.Out(CryptoStreamMode.Write, CryptoStreamMode.Read))
-                throw new ArgumentOutOfRangeException(nameof(mode), "Expected Read or Write value.");
-
             _key = new Rfc2898DeriveBytes(password, RijndaelParameters.SALT, RijndaelParameters.ITERATIONS);
             _symmetricKey = new RijndaelManaged { BlockSize = 256, Mode = CipherMode.CBC, Padding = PaddingMode.PKCS7 };
 
@@ -58,6 +55,7 @@ namespace Web.Transfer.Crypto
         /// <inheritdoc />
         public void Dispose()
         {
+            CryptoStream.Flush();
             CryptoStream.Dispose();
 
             _transform.Dispose();
