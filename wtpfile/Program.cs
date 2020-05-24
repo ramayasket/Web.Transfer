@@ -96,7 +96,7 @@ namespace Web.Transfer
 
             if (WTP_EXTENSION == fileInfo.Extension.ToLower()) {
 
-                newFileName = Path.GetFileNameWithoutExtension(fileName);
+                newFileName = GetFreeFileName(fileName);
                 direction = "from";
                 operation = PumpConvertFromProtocol;
             }
@@ -115,6 +115,31 @@ namespace Web.Transfer
             var t = ExecutionTimings.Measure(() => { ok = WithStreams(fileName, newFileName, operation); });
 
             Console.WriteLine((ok ? "Conversion complete" : "Conversion failed") + $" {t}");
+        }
+
+        private static string GetFreeFileName(string wtpFileName)
+        {
+            var directory = Path.GetDirectoryName(wtpFileName) ?? "";
+            
+            var original = Path.GetFileNameWithoutExtension(wtpFileName);
+
+            var unchanged = Path.Combine(directory, original);
+
+            if (!File.Exists(unchanged))
+                return unchanged;
+
+            var originalFileName = Path.GetFileNameWithoutExtension(original);
+            var originalExtension = Path.GetExtension(original);
+
+            string changed = unchanged;
+
+            for (int i = 1; i < short.MaxValue; i++) {
+                changed = Path.Combine(directory, $"{originalFileName} ({i}){originalExtension}");
+                if (!File.Exists(changed))
+                    return changed;
+            }
+
+            return changed;
         }
 
         private const int BUFFER_SIZE = 1024 * 1024;

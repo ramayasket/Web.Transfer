@@ -40,6 +40,10 @@ namespace model
 
         static void Main(string[] args)
         {
+            var wf = "1.bin";
+
+            return;
+
             long i = 12345678909876;
 
             var s = $"{i:##,###}";
