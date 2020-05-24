@@ -24,10 +24,11 @@ using System.Reflection;
     23.05.2020   1.0.6.0        Web.Transfer.Engine + wtpfile + decoding read stream
     23.05.2020   1.0.6.1        removed test exception )))
     23.05.2020   1.0.6.2        Password in App.config
-    24.05.2020   1.0.7.0        1.0.7.0: SharpZipLib replaced with GZipStream + BUG FIXED in Base32DecodingReadStream
+    24.05.2020   1.0.7.0        SharpZipLib replaced with GZipStream + BUG FIXED in Base32DecodingReadStream
+    24.05.2020   1.0.7.1        wtpfile using all three streams: GZip, Crypto, Base32
 */
 
-[assembly: AssemblyVersion("1.0.7.0")]
+[assembly: AssemblyVersion("1.0.7.1")]
 
 [assembly: AssemblyProduct("Web Transfer Protocol (WTP)")]
 [assembly: AssemblyCompany("Andrei Samoylov")]

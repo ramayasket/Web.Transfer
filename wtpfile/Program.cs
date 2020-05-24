@@ -141,16 +141,13 @@ namespace Web.Transfer
         {
             try {
                 using (var base32Decoder = new Base32DecodingReadStream(readStream)) {
-                    StreamHelper.PumpAll(base32Decoder, writeStream, _buffer, PumpIntervention);
-                    Console.WriteLine("success");
-                    return true;
-                    //using (var cryptoDecoder = new RijndaelStreamedCrypting(base32Decoder, _password, CryptoStreamMode.Read)) {
-                    //    StreamHelper.PumpAll(cryptoDecoder.CryptoStream, writeStream, _buffer, PumpIntervention);
-                    //    Console.WriteLine("success");
-                    //    return true;
-                    //    //using (var decompressStream = new GZipStream(cryptoDecoder.CryptoStream, CompressionMode.Decompress)) {
-                    //    //}
-                    //}
+                    using (var cryptoDecoder = new RijndaelStreamedCrypting(base32Decoder, _password, CryptoStreamMode.Read)) {
+                        using (var decompressStream = new GZipStream(cryptoDecoder.CryptoStream, CompressionMode.Decompress)) {
+                            StreamHelper.PumpAll(decompressStream, writeStream, _buffer, PumpIntervention);
+                            Console.WriteLine("success");
+                            return true;
+                        }
+                    }
                 }
             }
             catch (Exception x) {
@@ -163,16 +160,13 @@ namespace Web.Transfer
         {
             try {
                 using (var base32Encoder = new Base32EncodingStream(writeStream)) {
-                    StreamHelper.PumpAll(readStream, base32Encoder, _buffer, PumpIntervention);
-                    Console.WriteLine("success");
-                    return true;
-                    //using (var cryptoEncoder = new RijndaelStreamedCrypting(base32Encoder, _password, CryptoStreamMode.Write)) {
-                    //    StreamHelper.PumpAll(readStream, cryptoEncoder.CryptoStream, _buffer, PumpIntervention);
-                    //    Console.WriteLine("success");
-                    //    return true;
-                    //    //using (var compressStream = new GZipStream(cryptoEncoder.CryptoStream, CompressionMode.Compress)) {
-                    //    //}
-                    //}
+                    using (var cryptoEncoder = new RijndaelStreamedCrypting(base32Encoder, _password, CryptoStreamMode.Write)) {
+                        using (var compressStream = new GZipStream(cryptoEncoder.CryptoStream, CompressionMode.Compress)) {
+                            StreamHelper.PumpAll(readStream, compressStream, _buffer, PumpIntervention);
+                            Console.WriteLine("success");
+                            return true;
+                        }
+                    }
                 }
             }
             catch (Exception x) {

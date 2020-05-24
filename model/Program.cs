@@ -49,7 +49,6 @@ namespace model
                             using (var compressStream = new GZipStream(cryptoEncoder.CryptoStream, CompressionMode.Compress)) {
                                 StreamHelper.PumpAll(readStream, compressStream, buffer);
                             }
-                            //StreamHelper.PumpAll(readStream, cryptoEncoder.CryptoStream, buffer);
                         }
                     }
                 }
@@ -61,7 +60,6 @@ namespace model
                 using (var writeStream = File.OpenWrite(OUTPUT)) {
                     using (var base32Decoder = new Base32DecodingReadStream(readStream)) {
                         using (var cryptoDecoder = new RijndaelStreamedCrypting(base32Decoder, PASSWORD, CryptoStreamMode.Read)) {
-                            //StreamHelper.PumpAll(cryptoDecoder.CryptoStream, writeStream, buffer);
                             using (var decompressStream = new GZipStream(cryptoDecoder.CryptoStream, CompressionMode.Decompress)) {
                                 StreamHelper.PumpAll(decompressStream, writeStream, buffer);
                             }
