@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Kw.Common;
@@ -40,64 +41,6 @@ namespace model
 
         static void Main(string[] args)
         {
-            var wf = "1.bin";
-
-            return;
-
-            long i = 12345678909876;
-
-            var s = $"{i:##,###}";
-
-            return;
-            
-            GZipHelperTest();
-            return;
-
-            const string PASSWORD = "zlp";
-
-            var BUFFER_SIZE = 1024;
-            var buffer = new byte[BUFFER_SIZE];
-
-            string INPUT = TestData.testpath("input");
-            string WTP = TestData.testpath("wtp");
-            string OUTPUT = TestData.testpath("output");
-
-            var input = File.ReadAllBytes(INPUT);
-
-            TestData.Cleanup();
-
-            Console.WriteLine("Conversion to protocol");
-
-            using (var readStream = File.OpenRead(INPUT)) {
-                using (var writeStream = File.OpenWrite(WTP)) {
-                    using (var base32Encoder = new Base32EncodingStream(writeStream)) {
-                        using (var cryptoEncoder = new RijndaelStreamedCrypting(base32Encoder, PASSWORD, CryptoStreamMode.Write)) {
-                            using (var compressStream = new GZipStream(cryptoEncoder.CryptoStream, CompressionMode.Compress)) {
-                                StreamHelper.PumpAll(readStream, compressStream, buffer);
-                            }
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine("Conversion from protocol");
-
-            using (var readStream = File.OpenRead(WTP)) {
-                using (var writeStream = File.OpenWrite(OUTPUT)) {
-                    using (var base32Decoder = new Base32DecodingReadStream(readStream)) {
-                        using (var cryptoDecoder = new RijndaelStreamedCrypting(base32Decoder, PASSWORD, CryptoStreamMode.Read)) {
-                            using (var decompressStream = new GZipStream(cryptoDecoder.CryptoStream, CompressionMode.Decompress)) {
-                                StreamHelper.PumpAll(decompressStream, writeStream, buffer);
-                            }
-                        }
-                    }
-                }
-            }
-
-            var output = File.ReadAllBytes(OUTPUT);
-            var isok = input.SequenceEqual(output);
-
-            Console.WriteLine($"Conversion to/from: {isok}");
         }
 
         private static void SplitStringDecodeTest()

@@ -28,9 +28,10 @@ using System.Reflection;
     24.05.2020   1.0.7.1        wtpfile using all three streams: GZip, Crypto, Base32
     24.05.2020   1.0.7.2        GZip excluded (for performance) + refactoring
     24.05.2020   1.0.7.3        Preserve original file if exists
+    29.05.2020   1.0.8.0        Compression and encrypting made optional
 */
 
-[assembly: AssemblyVersion("1.0.7.3")]
+[assembly: AssemblyVersion("1.0.8.0")]
 
 [assembly: AssemblyProduct("Web Transfer Protocol (WTP)")]
 [assembly: AssemblyCompany("Andrei Samoylov")]

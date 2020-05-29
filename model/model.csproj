@@ -49,8 +49,14 @@
     <StartupObject>model.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Kw.Common, Version=1.2.2.0, Culture=neutral, PublicKeyToken=0368a69deeef33dd, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kw.Common.1.2.2\lib\net47\Kw.Common.dll</HintPath>
+    <Reference Include="Kw.Common, Version=1.2.2.3, Culture=neutral, PublicKeyToken=0368a69deeef33dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Kw.Common.1.2.2.3\lib\net47\Kw.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Kw.WinAPI, Version=1.2.0.2, Culture=neutral, PublicKeyToken=0368a69deeef33dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Kw.WinAPI.1.2.0.2\lib\net47\Kw.WinAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="Kw.Windows.Forms, Version=1.2.0.2, Culture=neutral, PublicKeyToken=0368a69deeef33dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Kw.Windows.Forms.1.2.0.2\lib\net47\Kw.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

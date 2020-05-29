@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Text.RegularExpressions;
-using System.Xml.Linq;
 using Kw.Common;
-using Web.Transfer.Base32;
-using Web.Transfer.Crypto;
-using Web.Transfer.Helpers;
 
 namespace Web.Transfer
 {
@@ -21,63 +11,27 @@ namespace Web.Transfer
     [ExcludeFromCodeCoverage]
     partial class Program
     {
+        private const int FREE_FILENAME_ATTEMPTS = short.MaxValue;
+        private const int BUFFER_SIZE = 1024 * 1024;
+        private static readonly byte[] _buffer = new byte[BUFFER_SIZE];
+
+        private static long _bytesPumped;
+        private static string _password;
+
+        private static bool _encrypt = true; // encryption is on by default
+        private static bool _compress = true; // encryption is on by default
+
         /// <summary>
-        /// Prints assembly title, executable name, version and usage information, if needed.
+        /// Orchestrates the application.
         /// </summary>
-        /// <param name="assembly">Entry assembly.</param>
-        /// <param name="usage">True to print usage information.</param>
-        static void PrintHeader(Assembly assembly, bool usage = false)
-        {
-            var parser = new Regex(@"(?<name>.+), Version=(?<version>.+), Culture=(?<culture>.+), PublicKeyToken=(?<token>.+)");
-            var parsed = parser.Match(assembly.FullName);
-
-            var version = parsed.Groups["version"].Value;
-            var exe = parsed.Groups["name"].Value;
-
-            var description = GetAssemblyAttribute(assembly, typeof(AssemblyDescriptionAttribute));
-            var copyright = GetAssemblyAttribute(assembly, typeof(AssemblyCopyrightAttribute));
-
-            var header = $"{description} ({exe}) {version}";
-
-            Console.WriteLine(header);
-            Console.WriteLine(copyright);
-            Console.WriteLine();
-
-            if (usage) {
-                Console.WriteLine($"Usage: {exe} <filename>");
-            }
-        }
-
-        static string GetAssemblyAttribute(Assembly a, Type attributeType)
-        {
-            return (string)a
-                    .CustomAttributes
-                    .Single(x => x.AttributeType == attributeType)
-                    .ConstructorArguments[0]
-                    .Value
-                ;
-        }
-
+        /// <param name="args">Command-line arguments.</param>
         static void Main(string[] args)
         {
-            const string WTP_EXTENSION = ".wtp";
+            // get file names and abort flag
+            var filenames = ProcessArguments(args, out bool abort);
 
-            var entry = Assembly.GetEntryAssembly();
-
-            Debug.Assert(null != entry);
-
-            var fileName = args.FirstOrDefault();
-            var hasFileName = !string.IsNullOrWhiteSpace(fileName);
-
-            PrintHeader(entry, !hasFileName);
-
-            if (!hasFileName) return;
-
-            if (!File.Exists(fileName)) {
-
-                Console.WriteLine($"File '{fileName}' doesn't exist");
+            if (abort)
                 return;
-            }
 
             try {
                 _password = AppConfig.RequiredSetting("Password");
@@ -87,8 +41,23 @@ namespace Web.Transfer
                 return;
             }
 
+            // convert each file name
+            foreach (var fileName in filenames) {
+                ProcessFileName(fileName);
+            }
+        }
+
+        private static void ProcessFileName(string fileName)
+        {
+            const string WTP_EXTENSION = ".wtp";
+
+            if (!File.Exists(fileName)) {
+
+                Console.WriteLine($"File '{fileName}' doesn't exist");
+                return;
+            }
+
             var fileInfo = new FileInfo(fileName);
-            _bytesTotal = fileInfo.Length;
 
             Func<Stream, Stream, bool> operation;
             string direction;
@@ -98,150 +67,26 @@ namespace Web.Transfer
 
                 newFileName = GetFreeFileName(fileName);
                 direction = "from";
-                operation = PumpConvertFromProtocol;
+                operation = PumpConvertFrom;
             }
             else {
 
                 newFileName = fileName + WTP_EXTENSION;
                 direction = "to";
-                operation = PumpConvertToProtocol;
+                operation = PumpConvertTo;
             }
 
             Console.WriteLine($"Converting '{fileName}' {direction} WTP format");
             Console.WriteLine();
+
+            _bytesPumped = 0;
 
             bool ok = false;
 
             var t = ExecutionTimings.Measure(() => { ok = WithStreams(fileName, newFileName, operation); });
 
             Console.WriteLine((ok ? "Conversion complete" : "Conversion failed") + $" {t}");
-        }
-
-        private static string GetFreeFileName(string wtpFileName)
-        {
-            var directory = Path.GetDirectoryName(wtpFileName) ?? "";
-            
-            var original = Path.GetFileNameWithoutExtension(wtpFileName);
-
-            var unchanged = Path.Combine(directory, original);
-
-            if (!File.Exists(unchanged))
-                return unchanged;
-
-            var originalFileName = Path.GetFileNameWithoutExtension(original);
-            var originalExtension = Path.GetExtension(original);
-
-            string changed = unchanged;
-
-            for (int i = 1; i < short.MaxValue; i++) {
-                changed = Path.Combine(directory, $"{originalFileName} ({i}){originalExtension}");
-                if (!File.Exists(changed))
-                    return changed;
-            }
-
-            return changed;
-        }
-
-        private const int BUFFER_SIZE = 1024 * 1024;
-        private static readonly byte[] _buffer = new byte[BUFFER_SIZE];
-
-        private static long _bytesPumped = 0;
-        private static long _bytesTotal = 0;
-
-        private static string _password;
-
-        static void PumpIntervention(int pumped)
-        {
-            _bytesPumped += pumped;
-
-            Console.Write($"\rPumped {_bytesPumped:##,###} bytes: ");
-        }
-
-        static bool PumpConvertFromProtocol(Stream readStream, Stream writeStream)
-        {
-            try {
-                using (var base32Decoder = new Base32DecodingReadStream(readStream)) {
-                    using (var cryptoDecoder = new RijndaelStreamedCrypting(base32Decoder, _password, CryptoStreamMode.Read)) {
-                        StreamHelper.PumpAll(cryptoDecoder.CryptoStream, writeStream, _buffer, PumpIntervention);
-                        Console.WriteLine("success");
-                        return true;
-                    }
-                }
-            }
-            catch (Exception x) {
-                Console.WriteLine(x.Message);
-                return false;
-            }
-        }
-
-        static bool PumpConvertToProtocol(Stream readStream, Stream writeStream)
-        {
-            try {
-                using (var base32Encoder = new Base32EncodingStream(writeStream)) {
-                    using (var cryptoEncoder = new RijndaelStreamedCrypting(base32Encoder, _password, CryptoStreamMode.Write)) {
-                        StreamHelper.PumpAll(readStream, cryptoEncoder.CryptoStream, _buffer, PumpIntervention);
-                        Console.WriteLine("success");
-                        return true;
-                    }
-                }
-            }
-            catch (Exception x) {
-                Console.WriteLine(x.Message);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Opens input and output streams and calls conversion operation with them as parameters.
-        /// </summary>
-        /// <param name="source">Input file.</param>
-        /// <param name="target">Output file.</param>
-        /// <param name="operation">Conversion operation.</param>
-        /// <returns></returns>
-        static bool WithStreams(string source, string target, Func<Stream, Stream, bool> operation)
-        {
-            var readStream = GuardedFileOpen(source, false);
-
-            if (null == readStream)
-                return false;
-
-            using (readStream) {
-
-                var writeStream = GuardedFileOpen(target, true);
-
-                if (null == writeStream)
-                    return false;
-
-                using (writeStream) {
-
-                    Console.WriteLine();
-                    var op = operation(readStream, writeStream);
-
-                    return op;
-                }
-            }
-        }
-
-        static Stream GuardedFileOpen(string f, bool write)
-        {
-            try {
-                Stream stream;
-
-                if (write) {
-                    File.Delete(f);
-                    stream = File.OpenWrite(f);
-                }
-                else
-                    stream = File.OpenRead(f);
-
-                var op = write ? "writing" : "reading";
-                Console.WriteLine($"File '{f}' opened for {op}");
-                return stream;
-            }
-            catch (Exception x) {
-                Console.WriteLine(x.Message);
-                return null;
-            }
+            Console.WriteLine();
         }
     }
 }

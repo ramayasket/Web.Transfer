@@ -64,6 +64,12 @@
     <Compile Include="..\etc\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="Program.Auxiliary.cs">
+      <DependentUpon>Program.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.Conversions.cs">
+      <DependentUpon>Program.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
