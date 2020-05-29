@@ -51,8 +51,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Kw.Common, Version=1.2.2.0, Culture=neutral, PublicKeyToken=0368a69deeef33dd, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kw.Common.1.2.2\lib\net47\Kw.Common.dll</HintPath>
+    <Reference Include="Kw.Common, Version=1.2.2.3, Culture=neutral, PublicKeyToken=0368a69deeef33dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Kw.Common.1.2.2.3\lib\net47\Kw.Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -90,6 +90,5 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
