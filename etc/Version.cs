@@ -29,9 +29,10 @@ using System.Reflection;
     24.05.2020   1.0.7.2        GZip excluded (for performance) + refactoring
     24.05.2020   1.0.7.3        Preserve original file if exists
     29.05.2020   1.0.8.0        Compression and encrypting made optional
+    29.05.2020   1.0.8.1        Kw.Common 1.2.3.0
 */
 
-[assembly: AssemblyVersion("1.0.8.0")]
+[assembly: AssemblyVersion("1.0.8.1")]
 
 [assembly: AssemblyProduct("Web Transfer Protocol (WTP)")]
 [assembly: AssemblyCompany("Andrei Samoylov")]

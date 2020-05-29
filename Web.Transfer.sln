@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "model", "model\model.csproj", "{0B74DDEC-6740-488E-808C-9942D0AA6F86}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9AB87581-27C8-4131-9778-18573EBA9ABD}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "etc", "etc", "{9AB87581-27C8-4131-9778-18573EBA9ABD}"
 	ProjectSection(SolutionItems) = preProject
 		etc\Version.cs = etc\Version.cs
 		etc\Web.Transfer.pfx = etc\Web.Transfer.pfx
