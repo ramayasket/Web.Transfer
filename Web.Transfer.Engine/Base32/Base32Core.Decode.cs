@@ -86,7 +86,7 @@ namespace Web.Transfer.Base32
 
                 _codeLength++;
 #if DEBUG
-                _code += code; // debug
+                //_code += code; // debug
 #endif
 
                 if (final && _codeLength < NATIVE_CODE_SIZE && 0 == _cutoffIndex)

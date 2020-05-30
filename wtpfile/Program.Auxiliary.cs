@@ -63,7 +63,19 @@ namespace Web.Transfer
         /// Checks if argument is (can be) a file name.
         /// </summary>
         /// <param name="x">Argument.</param>
-        static bool IsFileName(string x) => x.IndexOfAny(Path.GetInvalidFileNameChars()) == -1;
+        static bool IsFileName(string x)
+        {
+            try {
+                if (x.IndexOfAny(Path.GetInvalidPathChars()) != -1)
+                    return false;
+
+                _ = Path.GetFullPath(x);
+                return true;
+            }
+            catch {
+                return false;
+            }
+        }
 
         /// <summary>
         /// Checks if argument is a valid option.

@@ -93,7 +93,7 @@ namespace Web.Transfer.Base32
         /// <summary>
         /// Conversion dictionary from <seealso cref="char"/> (as key) into <seealso cref="byte"/>.
         /// </summary>
-        internal static readonly Dictionary<char, byte> DecodeTable;
+        internal static readonly byte[] DecodeTable;
 
         /// <summary>
         /// Generates a random index into the array of possible cutoff characters: { '0', '7', '8', '9' }.
@@ -105,7 +105,10 @@ namespace Web.Transfer.Base32
         /// </summary>
         static Base32Core()
         {
-            DecodeTable = new Dictionary<char, byte>();
+            DecodeTable = new byte['z'+1];
+
+            for (int i = 0; i < DecodeTable.Length; i++)
+                DecodeTable[i] = 0;
 
             for (int i = 0; i < EncodeTable.Length; i++)
             {
