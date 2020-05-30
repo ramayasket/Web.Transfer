@@ -19,10 +19,6 @@ namespace Web.Transfer.Base32
             /// </summary>
             internal bool Finished { get; private set; }
 
-#if DEBUG
-            private string _code = string.Empty;
-#endif
-
             /// <summary>
             /// Number of decoded bytes in the block.
             /// </summary>
@@ -85,9 +81,6 @@ namespace Web.Transfer.Base32
                 }
 
                 _codeLength++;
-#if DEBUG
-                //_code += code; // debug
-#endif
 
                 if (final && _codeLength < NATIVE_CODE_SIZE && 0 == _cutoffIndex)
                     throw new InvalidOperationException("Incomplete block without cutoff");
