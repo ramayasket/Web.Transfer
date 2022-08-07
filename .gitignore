@@ -1,0 +1,11 @@
+test/
+testresults/
+packages/
+debug/
+release/
+.vs/
+bin/
+obj/
+*.user
+*.orig
+Web.Transfer.pfx.txt

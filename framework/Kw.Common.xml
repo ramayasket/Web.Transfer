@@ -1,0 +1,1702 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Kw.Common</name>
+    </assembly>
+    <members>
+        <member name="T:Kw.Common.AppConfig">
+            <summary>
+            Вспомогательные функции работы с файлом конфигурации
+            </summary>
+        </member>
+        <member name="M:Kw.Common.AppConfig.Setting``1(System.String,``0)">
+            <summary>
+            Получает данные конфигурации приложения.
+            </summary>
+            <param name="key">Название настройки</param>
+            <param name="def">Значение по умолчанию</param>
+            <returns>Значение настройки</returns>
+        </member>
+        <member name="M:Kw.Common.AppConfig.Setting(System.String,System.String)">
+            <summary>
+            Получает данные конфигурации приложения.
+            </summary>
+            <param name="key">Название настройки</param>
+            <param name="def">Значение по умолчанию</param>
+            <returns>Значение настройки</returns>
+        </member>
+        <member name="M:Kw.Common.AppConfig.RequiredSetting``1(System.String)">
+            <summary>
+            Получает обязательные данные конфигурации приложения.
+            </summary>
+            <param name="key">Название настройки</param>
+            <returns>Значение настройки</returns>
+        </member>
+        <member name="M:Kw.Common.AppConfig.RequiredSetting(System.String)">
+            <summary>
+            Получает обязательные данные конфигурации приложения.
+            </summary>
+            <param name="key">Название настройки</param>
+            <returns>Значение настройки</returns>
+        </member>
+        <member name="P:Kw.Common.AppConfig.Path">
+            <summary>
+            Возвращает путь к файлу конфигурации текущего приложения
+            </summary>
+        </member>
+        <member name="P:Kw.Common.AppConfig.Root">
+            <summary>
+            Возвращает изменяемую конфигурацию приложения в виде XElement
+            </summary>
+        </member>
+        <member name="P:Kw.Common.AppConfig.AppSettings">
+            <summary>
+            Возвращает изменяемый раздел конфигурации appSettings в виде XElement
+            </summary>
+        </member>
+        <member name="M:Kw.Common.AppConfig.GetAppSetting(System.String)">
+            <summary>
+            Возвращает изменяемую настройку конфигурации в виде XElement
+            </summary>
+            <param name="key">Значение атрибута key</param>
+            <returns>Объект XElement, если настройка найдена, иначе null</returns>
+        </member>
+        <member name="M:Kw.Common.AppConfig.Save">
+            <summary>
+            Сохраняет изменения, внесенные в конфигурацию приложения
+            </summary>
+        </member>
+        <member name="T:Kw.Common.AppCore">
+            <summary>
+            Обеспечивает базовую функциональность
+            </summary>
+        </member>
+        <member name="M:Kw.Common.AppCore.Initialize">
+            <summary>
+            Initializes application. Calls constitution handlers.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.AppCore.DefaultPrintingPrefix">
+            <summary>
+            By default, print date and time with current thread culture.
+            </summary>
+            <returns>
+            Prefix string.
+            </returns>
+            <returns>
+            ReSharper disable SpecifyACultureInStringConversionExplicitly
+            </returns>
+        </member>
+        <member name="P:Kw.Common.AppCore.Exiting">
+            <summary>
+            Indicates application wants to go off. Means do not begin anything, wrap off what you have and roll out.
+            </summary>
+            <remarks>
+            Exiting cannot be changed from True to False. Once we began to exit, there were no way back.
+            </remarks>
+        </member>
+        <member name="M:Kw.Common.AppCore.ReportException(System.Exception,Kw.Common.ExceptionCatcher[])">
+            <summary>
+            Записывает информацию об исключении в лог приложения.
+            </summary>
+            <param name="x">Объект исключения.</param>
+            <param name="catchers">Дполнительные обработчики.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Kw.Common.BitStringConverter">
+            <summary>
+            Conversions between whole numeric types and bit form strings.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.BitStringConverter.ToBitString(System.UInt64,System.Int32)">
+            <summary>
+            Converts <seealso cref="T:System.UInt64"/> value to bit form string of given length.
+            </summary>
+            <param name="x">Value to convert.</param>
+            <param name="length">Bit form string length. Used to support types other than <seealso cref="T:System.UInt64"/>.</param>
+            <returns>Bit (base 2) representation of value.</returns>
+        </member>
+        <member name="M:Kw.Common.BitStringConverter.FromBitString(System.Char[])">
+            <summary>
+            Converts bit form characters to <seealso cref="T:System.UInt64"/> value.
+            </summary>
+            <param name="buffer">Bit form characters.</param>
+            <returns><seealso cref="T:System.UInt64"/> value.</returns>
+        </member>
+        <member name="M:Kw.Common.BitStringConverter.FromBitString``1(System.String)">
+            <summary>
+            Converts from bit form string to whole number.
+            </summary>
+            <typeparam name="T">Whole number type/</typeparam>
+            <param name="bitform">Bit form string.</param>
+            <returns>Converted whole number value.</returns>
+        </member>
+        <member name="M:Kw.Common.BitStringConverter.ToBitString(System.Int64)">
+            <summary> Converts number to bit string form. </summary>
+        </member>
+        <member name="M:Kw.Common.BitStringConverter.ToBitString(System.UInt64)">
+            <summary> Converts number to bit string form. </summary>
+        </member>
+        <member name="M:Kw.Common.BitStringConverter.ToBitString(System.Int32)">
+            <summary> Converts number to bit string form. </summary>
+        </member>
+        <member name="M:Kw.Common.BitStringConverter.ToBitString(System.UInt32)">
+            <summary> Converts number to bit string form. </summary>
+        </member>
+        <member name="M:Kw.Common.BitStringConverter.ToBitString(System.Int16)">
+            <summary> Converts number to bit string form. </summary>
+        </member>
+        <member name="M:Kw.Common.BitStringConverter.ToBitString(System.UInt16)">
+            <summary> Converts number to bit string form. </summary>
+        </member>
+        <member name="M:Kw.Common.BitStringConverter.ToBitString(System.Byte)">
+            <summary> Converts number to bit string form. </summary>
+        </member>
+        <member name="M:Kw.Common.BitStringConverter.ToBitString(System.SByte)">
+            <summary> Converts number to bit string form. </summary>
+        </member>
+        <member name="T:Kw.Common.Collections.RingEnumerator`1">
+            <summary>
+            Cycling enumerator.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.Collections.RingEnumerator`1.MoveNext">
+            <summary>
+            Gets to next element. Returns to first element when reaching end of collection.
+            </summary>
+            <returns>True.</returns>
+        </member>
+        <member name="M:Kw.Common.Collections.RingEnumerator`1.Reset">
+            <summary>
+            Navigates to first element.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.Collections.RingEnumerator`1.Current">
+            <summary>
+            Current element of selection.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.Collections.Ring`1">
+            <summary>
+            Simeple ringed read-only collection.
+            </summary>
+            <typeparam name="T">Element type.</typeparam>
+            <remarks>
+            Don't foreach this collection, the cycle would never end :)~
+            </remarks>
+        </member>
+        <member name="M:Kw.Common.Collections.Ring`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Initializes collection from source collection.
+            </summary>
+            <param name="elements">Source collection.</param>
+        </member>
+        <member name="M:Kw.Common.Collections.Ring`1.#ctor(`0[])">
+            <summary>
+            Initializes collection from source array.
+            </summary>
+            <param name="elements">Source array.</param>
+        </member>
+        <member name="T:Kw.Common.CommonExtensions">
+            <summary>
+            Разные методы расширения общего назначения.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.ValueOrDefault``1(System.Nullable{``0})">
+            <summary>
+            Returns value of nullable if not null or default otherwise.
+            </summary>
+            <typeparam name="T">Struct type.</typeparam>
+            <param name="nvalue">Nullabe value.</param>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.ValueOrDefault``2(System.Collections.Generic.IDictionary{``0,``1},``0)">
+            <summary>
+            Safely returns dictionary entry.
+            </summary>
+            <typeparam name="TK">Key type</typeparam>
+            <typeparam name="TV">Value type</typeparam>
+            <param name="map">Dictionary object</param>
+            <param name="key">Key object</param>
+            <returns>Keyed value or default</returns>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.Clone``2(System.Collections.Generic.IDictionary{``0,``1})">
+            <summary>
+            Returns new map with pairs copied from another map.
+            </summary>
+            <typeparam name="K">Key type.</typeparam>
+            <typeparam name="T">Value type.</typeparam>
+            <param name="from">Source map.</param>
+            <returns>New map.</returns>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.Clone``1(System.Collections.Generic.IList{``0})">
+            <summary>
+            Returns new list with values copied from another list.
+            </summary>
+            <typeparam name="T">Value type.</typeparam>
+            <param name="from">Source list.</param>
+            <returns>New list.</returns>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.Clone``1(``0[])">
+            <summary>
+            Returns new array with values copied from another array.
+            </summary>
+            <typeparam name="T">Value type.</typeparam>
+            <param name="from">Source array.</param>
+            <returns>New array.</returns>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.SafeToString(System.Object,System.String)">
+            <summary>
+            Возвращает строковое представление объекта.
+            </summary>
+            <param name="target">Целевой объект.</param>
+            <param name="replacement"></param>
+            <returns>Строковое представление целевого объекта или пустая строка если он не задан.</returns>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.InCase``1(``0,``0,``0)">
+            <summary>
+            Сокращенная форма switch.
+            </summary>
+            <typeparam name="T">Тип данных.</typeparam>
+            <param name="argument">Исходные данные.</param>
+            <param name="condition">Проверочные данные.</param>
+            <param name="result">Результат при проверке.</param>
+            <returns>Если аргумент равен условию, то измененный аргумент, иначе неизменный аргумент.</returns>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.InCase``1(``0,``0,System.Object)">
+            <summary>
+            Сокращённая форма switch.
+            </summary>
+            <typeparam name="T">Тип данных.</typeparam>
+            <param name="argument">Исходные данные.</param>
+            <param name="condition">Проверочные данные.</param>
+            <param name="result">Результат при проверке.</param>
+            <returns>Если аргумент равен условию, то измененный аргумент, иначе неизменный аргумент.</returns>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.NonEmpty``1(``0[])">
+            <summary>
+            Возвращает непустые элементы массива.
+            </summary>
+            <typeparam name="T">Тип элемента массива.</typeparam>
+            <param name="source">Исходный массив.</param>
+            <returns>Отфильтрованный массив.</returns>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.NonEmpty``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Возвращает непустые элементы коллекции.
+            </summary>
+            <typeparam name="T">Тип элемента коллекции.</typeparam>
+            <param name="source">Исходная коллекция.</param>
+            <returns>Отфильтрованная коллекция.</returns>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.WhenEmpty``1(``0,``0)">
+            <summary>
+            Возвращает значение или значение по умолчанию.
+            </summary>
+            <typeparam name="T">Тип значения.</typeparam>
+            <param name="value">Проверяемое значение.</param>
+            <param name="def">Значение по умолчанию.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.Is``1(System.Type)">
+            <summary>
+            Проверяет присваиваемость типа к образцовому.
+            </summary>
+            <typeparam name="T">Образцовый тип.</typeparam>
+            <param name="target">Исследуемый тип.</param>
+            <returns>True, если переменной образцового типа может быть присвоена ссылка на объект исследуемого типа. Другими словами, если исследуемый тип уналедован от образцового. Иначе, False.</returns>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.Is``1(System.Object)">
+            <summary>
+            Проверяет принадледность объекта к образцовому типу.
+            </summary>
+            <typeparam name="T">Образцовый тип.</typeparam>
+            <param name="target">Исследуемый объект.</param>
+            <returns>True если исследуемый объект не null и может использоваться для присваивания переменной типа T.</returns>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.ToCompactString(System.Guid)">
+            <summary>
+            Возвращает компактное строковое представление Guid.
+            </summary>
+            <param name="id">Guid</param>
+            <returns>Компактная строка.</returns>
+            <remarks>
+            Компактное строковое представление не включает в себя незначащие нули.
+            Например, для Guid {00000003-0003-0000-0000-000000000000} компактное представление "3-3-0-0-0".
+            </remarks>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.AsFunction``2(System.Action{``0})">
+            <summary>
+            Возвращает ссылку на функцию на основе метода.
+            </summary>
+            <typeparam name="T">Тип входных данных функции.</typeparam>
+            <typeparam name="R">Тип выходных данных функции.</typeparam>
+            <param name="action">Метод для выполнения.</param>
+            <returns>Ссылка на функцию.</returns>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.AsProcessMany``1(System.Action{``0})">
+            <summary>
+            Возвращает ссылку на метод обработки коллекции входных данных.
+            </summary>
+            <returns>Метод обработки коллекции входных данных.</returns>
+        </member>
+        <member name="T:Kw.Common.CommonExtensions.ActionWrapper`1">
+            <summary>
+            Запоминает ссылку на метод.
+            </summary>
+            <typeparam name="T">Тип входных данных для метода.</typeparam>
+        </member>
+        <member name="P:Kw.Common.CommonExtensions.ActionWrapper`1.Action">
+            <summary>
+            Ссылка на метод.
+            </summary>
+        </member>
+        <member name="F:Kw.Common.CommonExtensions.ActionWrapper`1._action">
+            <summary>Ссылка на метод.</summary>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.ActionWrapper`1.#ctor(System.Action{`0})">
+            <param name="action">Ссылка на метод.</param>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.ActionWrapper`1.AsFunction``1(`0)">
+            <summary>
+            Выполняет метод и возвращает значение по умолчанию.
+            </summary>
+            <typeparam name="R">Тип выходных данных.</typeparam>
+            <param name="data">Входные данные.</param>
+            <returns>Значение по умолчанию для типа <see cref="!:R"/>.</returns>
+        </member>
+        <member name="M:Kw.Common.CommonExtensions.ActionWrapper`1.ProcessMany(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Обрабатывает коллекцию входных данных.
+            </summary>
+            <param name="data">Коллекция входных данных.</param>
+        </member>
+        <member name="T:Kw.Common.Containers.Casing`1">
+            <summary>
+            Reference-typed wrapper around a structure.
+            </summary>
+            <typeparam name="T">Type of value.</typeparam>
+        </member>
+        <member name="T:Kw.Common.DynamicResources.DynamicResourceAllocator`1">
+            <summary>
+            Аллокатор ресурса для динамического пула.
+            </summary>
+            <typeparam name="T">Тип управляемого ресурса.</typeparam>
+        </member>
+        <member name="M:Kw.Common.DynamicResources.DynamicResourceAllocator`1.#ctor">
+            <summary>
+            Выделяет потоку экземпляр ресурса при входе в блок using.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.DynamicResources.DynamicResourceAllocator`1.CreateInstance">
+            <summary>
+            Создает экземпляр ресурса.
+            </summary>
+            <returns>Ссылка на ресурс.</returns>
+        </member>
+        <member name="M:Kw.Common.DynamicResources.DynamicResourceAllocator`1.Dispose">
+            <summary>
+            Освобождает экземпляр ресурса при выходе из блока using.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.DynamicResources.DynamicResourcePool`1">
+            <summary>
+            Динамический пул разделяемых между потоками ресурсов.
+            </summary>
+            <typeparam name="T">Тип управляемого ресурса.</typeparam>
+            <remarks>
+            Динамический пул выделяет экземпляр ресурса на каждый поток.
+            Выделение ресурса инициируется классом <see cref="T:Kw.Common.DynamicResources.DynamicResourceAllocator`1"/> внутри блока using.
+            Освобождение ресурса происходит при выходе из блока using.
+            Если все созданные ресурсы распределены то при выделении ресурса создается новый экземпляр.
+            </remarks>
+        </member>
+        <member name="P:Kw.Common.DynamicResources.DynamicResourcePool`1.Capacity">
+            <summary>
+            Количество ресурсов в пуле.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.DynamicResources.DynamicResourcePool`1.AllocatedResource">
+            <summary>
+            Ссылка на экземпляр ресурса выделенный текущему потоку.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.DynamicResources.DynamicResourcePool`1.AllocateResource(Kw.Common.DynamicResources.DynamicResourceAllocator{`0})">
+            <summary>
+            Выделяет свободный или создает новый экземпляр ресурса.
+            </summary>
+            <param name="allocator">Объект-аллокатор.</param>
+        </member>
+        <member name="M:Kw.Common.DynamicResources.DynamicResourcePool`1.FreeResource">
+            <summary>
+            Освобождает ресурс и возвращает его в пул.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.ExecutionStep">
+            <summary>
+            Timing information on execution step.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.ExecutionStep.Begins">
+            <summary>
+            The time the step began.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.ExecutionStep.Ends">
+            <summary>
+            The time the step ended.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.ExecutionStep.Step">
+            <summary>
+            Some name.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.ExecutionStep.StepSpan">
+            <summary>
+            The time the step took to execute.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.ExecutionStepMeter">
+            <summary>
+            Splits code to logical steps and measures their execution times.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.ExecutionStepMeter.StepAction">
+            <summary>
+            Delegate to invoke upon step completion.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.ExecutionStepMeter.Steps">
+            <summary>
+            Steps completed so far.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.ExecutionStepMeter.#ctor(System.String,System.Action{Kw.Common.ExecutionStep})">
+            <summary>
+            Initializes meter and creates first step.
+            </summary>
+            <param name="step1">Name of first step.</param>
+            <param name="stepAction">Optional step action.</param>
+        </member>
+        <member name="M:Kw.Common.ExecutionStepMeter.Next(System.String)">
+            <summary>
+            Completes current step and begins a new one.
+            </summary>
+            <param name="stepN">New step name.</param>
+            <returns>Current step.</returns>
+        </member>
+        <member name="M:Kw.Common.ExecutionStepMeter.Stop">
+            <summary>
+            Completes current step.
+            </summary>
+            <returns>Current step.</returns>
+        </member>
+        <member name="T:Kw.Common.FrameworkUtils">
+            <summary>
+            Framework utilities
+            </summary>
+        </member>
+        <member name="M:Kw.Common.FrameworkUtils.GetStackMethod(System.Int32)">
+            <summary>
+            Returns information about the n-th (from current) method in the call stack.
+            </summary>
+            <param name="offset">Offset from current method.</param>
+            <returns>MethodBase or null if stack is less than offset.</returns>
+        </member>
+        <member name="T:Kw.Common.Guarded">
+            <summary>
+            Executes code with no regard to exceptions
+            </summary>
+            ReSharper disable EmptyGeneralCatchClause
+            ReSharper disable InconsistentNaming
+        </member>
+        <member name="T:Kw.Common.GZipHelper">
+            <summary>
+            GZip compression/decompression of byte arrays.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.GZipHelper.Pack(System.Byte[])">
+            <summary>
+            Compresses byte array.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.GZipHelper.Unpack(System.Byte[])">
+            <summary>
+            Decompresses byte array.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.SEVERITY">
+            <summary>
+            HRESULT's severity value.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.HRESULT">
+            <summary>
+            COM error code.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.HRESULT.Code">
+            <summary>
+            Facility's status code.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.HRESULT.Facility">
+            <summary>
+            Indicates the system service that is responsible for the error.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.HRESULT.Severity">
+            <summary>
+            Indicates success/failure.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.HRESULT.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of HRESULT structure with Int32 value.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.HRESULT.#ctor(System.UInt32)">
+            <summary>
+            Initializes a new instance of HRESULT structure with UInt32 value.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.HRESULT.op_Implicit(Kw.Common.HRESULT)~System.Int32">
+            <summary>
+            Converts HRESULT to Int32 value.
+            </summary>
+            <param name="hr">HRESULT to convert.</param>
+        </member>
+        <member name="M:Kw.Common.HRESULT.op_Implicit(Kw.Common.HRESULT)~System.UInt32">
+            <summary>
+            Converts HRESULT to UInt32 value.
+            </summary>
+            <param name="hr">HRESULT to convert.</param>
+        </member>
+        <member name="M:Kw.Common.HRESULT.op_Implicit(System.Int32)~Kw.Common.HRESULT">
+            <summary>
+            Converts Int32 value to HRESULT.
+            </summary>
+            <param name="value">Int32 value to convert.</param>
+        </member>
+        <member name="M:Kw.Common.HRESULT.op_Implicit(System.UInt32)~Kw.Common.HRESULT">
+            <summary>
+            Converts UInt32 value to HRESULT.
+            </summary>
+            <param name="value">UInt32 value to convert.</param>
+        </member>
+        <member name="P:Kw.Common.HtmlTag.Name">
+            <summary>
+            Name of this tag
+            </summary>
+        </member>
+        <member name="P:Kw.Common.HtmlTag.Attributes">
+            <summary>
+            Collection of attribute names and values for this tag
+            </summary>
+        </member>
+        <member name="P:Kw.Common.HtmlTag.TrailingSlash">
+            <summary>
+            True if this tag contained a trailing forward slash
+            </summary>
+        </member>
+        <member name="M:Kw.Common.HtmlParser.Reset">
+            <summary>
+            Resets the current position to the start of the current document
+            </summary>
+        </member>
+        <member name="M:Kw.Common.HtmlParser.Reset(System.String)">
+            <summary>
+            Sets the current document and resets the current position to the
+            start of it
+            </summary>
+            <param name="html"></param>
+        </member>
+        <member name="P:Kw.Common.HtmlParser.EOF">
+            <summary>
+            Indicates if the current position is at the end of the current
+            document
+            </summary>
+        </member>
+        <member name="M:Kw.Common.HtmlParser.ParseNext(System.String,Kw.Common.HtmlTag@)">
+            <summary>
+            Parses the next tag that matches the specified tag name
+            </summary>
+            <param name="name">Name of the tags to parse ("*" = parse all
+            tags)</param>
+            <param name="tag">Returns information on the next occurrence
+            of the specified tag or null if none found</param>
+            <returns>True if a tag was parsed or false if the end of the
+            document was reached</returns>
+        </member>
+        <member name="M:Kw.Common.HtmlParser.ParseTag(System.String,Kw.Common.HtmlTag@)">
+            <summary>
+            Parses the contents of an HTML tag. The current position should
+            be at the first character following the tag's opening less-than
+            character.
+            
+            Note: We parse to the end of the tag even if this tag was not
+            requested by the caller. This ensures subsequent parsing takes
+            place after this tag
+            </summary>
+            <param name="name">Name of the tag the caller is requesting,
+            or "*" if caller is requesting all tags</param>
+            <param name="tag">Returns information on this tag if it's one
+            the caller is requesting</param>
+            <returns>True if data is being returned for a tag requested by
+            the caller or false otherwise</returns>
+        </member>
+        <member name="M:Kw.Common.HtmlParser.ParseTagName">
+            <summary>
+            Parses a tag name. The current position should be the first
+            character of the name
+            </summary>
+            <returns>Returns the parsed name string</returns>
+        </member>
+        <member name="M:Kw.Common.HtmlParser.ParseAttributeName">
+            <summary>
+            Parses an attribute name. The current position should be the
+            first character of the name
+            </summary>
+            <returns>Returns the parsed name string</returns>
+        </member>
+        <member name="M:Kw.Common.HtmlParser.ParseAttributeValue">
+            <summary>
+            Parses an attribute value. The current position should be the
+            first non-whitespace character following the equal sign.
+            
+            Note: We terminate the name or value if we encounter a new line.
+            This seems to be the best way of handling errors such as values
+            missing closing quotes, etc.
+            </summary>
+            <returns>Returns the parsed value string</returns>
+        </member>
+        <member name="M:Kw.Common.HtmlParser.MoveToNextTag">
+            <summary>
+            Moves to the start of the next tag
+            </summary>
+            <returns>True if another tag was found, false otherwise</returns>
+        </member>
+        <member name="M:Kw.Common.HtmlParser.Peek">
+            <summary>
+            Returns the character at the current position, or a null
+            character if we're at the end of the document
+            </summary>
+            <returns>The character at the current position</returns>
+        </member>
+        <member name="M:Kw.Common.HtmlParser.Peek(System.Int32)">
+            <summary>
+            Returns the character at the specified number of characters
+            beyond the current position, or a null character if the
+            specified position is at the end of the document
+            </summary>
+            <param name="ahead">The number of characters beyond the
+            current position</param>
+            <returns>The character at the specified position</returns>
+        </member>
+        <member name="M:Kw.Common.HtmlParser.Move">
+            <summary>
+            Moves the current position ahead one character
+            </summary>
+        </member>
+        <member name="M:Kw.Common.HtmlParser.Move(System.Int32)">
+            <summary>
+            Moves the current position ahead the specified number of characters
+            </summary>
+            <param name="ahead">The number of characters to move ahead</param>
+        </member>
+        <member name="M:Kw.Common.HtmlParser.SkipWhitespace">
+            <summary>
+            Moves the current position to the next character that is
+            not whitespace
+            </summary>
+        </member>
+        <member name="M:Kw.Common.HtmlParser.NormalizePosition">
+            <summary>
+            Normalizes the current position. This is primarily for handling
+            conditions where IndexOf(), etc. return negative values when
+            the item being sought was not found
+            </summary>
+        </member>
+        <member name="T:Kw.Common.INamed">
+            <summary>
+            Контракт чего-либо с именем.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.Literals">
+            <summary>
+            Константы общего назначения
+            ReSharper disable InconsistentNaming
+            </summary>
+        </member>
+        <member name="T:Kw.Common.MRUTracker">
+            <summary>
+            Tracks MRU (most recently used) items.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.OverridableLiteral">
+            <summary>
+            Переопределяемый литерал.
+            ReSharper disable InconsistentNaming
+            </summary>
+        </member>
+        <member name="T:Kw.Common.PrimeAccumulator">
+            <summary>
+            Stores known prime values in two hash sets.
+            </summary>
+            <remarks>
+            Primes in range 1 ÷ int.MaxValue do not fit in one HashSet.
+            </remarks>
+        </member>
+        <member name="T:Kw.Common.PrimeComputer">
+            <summary>
+            Computes whether Numbereger value is prime.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.PrimeComputer.KnownPrimes">
+            <summary>
+            Returns a collection of known prime values.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.PrimeComputer.KnownBoundary">
+            <summary>
+            Returns boundary below which all primes are known.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.PrimeComputer.KnownCount">
+            <summary>
+            Returns known prime count without enumerating accumulator.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.PrimeComputer.#cctor">
+            <summary>
+            Accepts 1 as prime value.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.PrimeComputer.AdvanceBoundary(System.Int32)">
+            <summary>
+            Advances known boundary by 1.
+            </summary>
+            <param name="value">Potential new boundary.</param>
+        </member>
+        <member name="M:Kw.Common.PrimeComputer.AcceptFromRange(System.Int32)">
+            <summary>
+            Accepts known prime value from a pre-computed range.
+            </summary>
+            <param name="value">Prime value.</param>
+        </member>
+        <member name="M:Kw.Common.PrimeComputer.Accept(System.Int32)">
+            <summary>
+            Accepts known prime value.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Kw.Common.PrimeComputer.IsPrime(System.Int32)">
+            <summary>
+            Checks whether value is prime.
+            </summary>
+            <param name="value">Numbereger to test.</param>
+            <returns>True if value is prime.</returns>
+        </member>
+        <member name="T:Kw.Common.Randomizer`1">
+            <summary>
+            Typed random generator with range.
+            </summary>
+            <typeparam name="T">Type of random values to generate.</typeparam>
+            <remarks>
+            Supported types are <seealso cref="T:System.SByte"/>, <seealso cref="T:System.Byte"/>, <seealso cref="T:System.Int16"/>, <seealso cref="T:System.UInt16"/>, <seealso cref="T:System.Int32"/>, <seealso cref="T:System.UInt32"/>, <seealso cref="T:System.Single"/>, <seealso cref="T:System.Double"/>, <seealso cref="T:System.Decimal"/>.
+            </remarks>
+        </member>
+        <member name="F:Kw.Common.Randomizer`1.WholeTypes">
+            <summary>
+            Supported whole number types.
+            </summary>
+            <remarks>
+            Int64 and UInt64 aren't supported because <seealso cref="T:System.Random"/> has no support for them.
+            </remarks>
+        </member>
+        <member name="F:Kw.Common.Randomizer`1.FloatingTypes">
+            <summary>
+            Supported floating number types.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.Randomizer`1.#ctor(`0,`0)">
+            <summary>
+            Initializes a new instance of the <seealso cref="T:Kw.Common.Randomizer`1"/> using the specified boundaries.
+            </summary>
+            <param name="low">Low boundary.</param>
+            <param name="high">High boundary.</param>
+            <remarks>
+            The range of return values includes low boundary but not high boundary; that is, the return value is greater than or equal to low boundary and less than high boundary.
+            </remarks>
+        </member>
+        <member name="M:Kw.Common.Randomizer`1.Next">
+            <summary>
+            Returns a random number within the boundaries.
+            </summary>
+            <returns>
+            A numeric value greater than or equal to low boundary and less than high boundary.
+            </returns>
+        </member>
+        <member name="T:Kw.Common.RethrowException">
+            <summary>
+            Rethrow-исключение.
+            </summary>
+            <remarks>
+            Rethrow-исключение используется там, где объект исключения возвращается как выходные данные,
+            например, при выполнении метода Join() параллельного пула.
+            Если выбрасывать такое исключение через throw, то информация о стеке вызова будет заменена на
+            стек вызова строки throw.
+            Для сохранения стека вызова объект исключения заворачивается как внутреннее исключение RethrowException.
+            </remarks>
+        </member>
+        <member name="M:Kw.Common.RethrowException.#ctor(System.Exception)">
+            <summary>
+            Инициализация экземпляра RethrowException из повторно-выбрасываемого исключения.
+            </summary>
+            <param name="wrap">Повторно-выбрасываемое исключение.</param>
+        </member>
+        <member name="M:Kw.Common.RethrowException.IsValidRethrowException(System.Exception)">
+            <summary>
+            Проверяет объект исключения.
+            </summary>
+            <param name="x">Исключение для проверки.</param>
+            <returns>True если объект <see cref="!:x"/> является RethrowException и содержит вложенное повторно-выброшенное исключение; иначе False.</returns>
+        </member>
+        <member name="T:Kw.Common.RijndaelCrypting">
+            <summary>
+            Encrypts and decrypts data using AES (Rijndael).
+            </summary>
+        </member>
+        <member name="T:Kw.Common.Runtime">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Kw.Common.Runtime.Release``1(``0@)">
+            <summary>
+            Nullifies reference in the way which isn't optimized away.
+            </summary>
+            <param name="o"></param>
+        </member>
+        <member name="T:Kw.Common.Function">
+            <summary>
+            Формирует цепочку описания функции на основе <see cref="T:Kw.Common.FunctionNode`2"/>.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.Function.On``2(``0,``1)">
+            <summary>
+            Создает цепочку описания функции.
+            </summary>
+            <typeparam name="TA">Тип аргумента.</typeparam>
+            <typeparam name="TV">Тип функции.</typeparam>
+            <param name="argument">Аргумент.</param>
+            <param name="value">Значение.</param>
+            <returns>Элемент цепочки.</returns>
+        </member>
+        <member name="M:Kw.Common.Function.On``2(Kw.Common.FunctionNode{``0,``1},``0,``1)">
+            <summary>
+            Продолжает цепочку описания функции и вычисляет ее.
+            </summary>
+            <typeparam name="TA">Тип аргумента.</typeparam>
+            <typeparam name="TV">Тип функции.</typeparam>
+            <param name="previous">Предыдущий элемент цепочки.</param>
+            <param name="argument">Аргумент.</param>
+            <param name="value">Значение.</param>
+            <returns>Элемент цепочки.</returns>
+        </member>
+        <member name="M:Kw.Common.Function.Otherwise``2(Kw.Common.FunctionNode{``0,``1},``1)">
+            <summary>
+            Завершает цепочку описания функции.
+            </summary>
+            <typeparam name="TA">Тип аргумента.</typeparam>
+            <typeparam name="TV">Тип функции.</typeparam>
+            <param name="previous">Предыдущий элемент цепочки.</param>
+            <param name="value">Значение по умолчанию.</param>
+            <returns>Вычисленное значение.</returns>
+        </member>
+        <member name="M:Kw.Common.Function.Otherwise``2(Kw.Common.FunctionNode{``0,``1},``1,``0)">
+            <summary>
+            Завершает цепочку описания функции и вычисляет ее.
+            </summary>
+            <typeparam name="TA">Тип аргумента.</typeparam>
+            <typeparam name="TV">Тип функции.</typeparam>
+            <param name="previous">Предыдущий элемент цепочки.</param>
+            <param name="value">Значение по умолчанию.</param>
+            <param name="argument">Аргумент функции.</param>
+            <returns>Вычисленное значение.</returns>
+        </member>
+        <member name="M:Kw.Common.Function.Compute``2(Kw.Common.FunctionNode{``0,``1},``0)">
+            <summary>
+            Вычисляет описанную цепочкой функцию.
+            </summary>
+            <typeparam name="TA">Тип аргумента.</typeparam>
+            <typeparam name="TV">Тип функции.</typeparam>
+            <param name="last">Последний элемент цепочки.</param>
+            <param name="argument">Аргумент функции.</param>
+            <returns>Вычисленное значение.</returns>
+        </member>
+        <member name="T:Kw.Common.FunctionNode`2">
+            <summary>
+            Элемент цепочки описания функции.
+            </summary>
+            <typeparam name="TA">Тип аргумента.</typeparam>
+            <typeparam name="TV">Тип значения.</typeparam>
+        </member>
+        <member name="T:Kw.Common.Singleton`1">
+            <summary>
+            Представляет синглтон заданного типа.
+            </summary>
+            <typeparam name="T">Тип синглтона.</typeparam>
+        </member>
+        <member name="M:Kw.Common.StreamHelper.PumpAll(System.IO.Stream,System.IO.Stream,System.Byte[],System.Action{System.Int32})">
+            <summary>
+            Reads 'from' and writes 'to' streams until end-of-stream is reached on 'from'.
+            </summary>
+            <param name="from"><seealso cref="T:System.IO.Stream"/> to read from.</param>
+            <param name="to"><seealso cref="T:System.IO.Stream"/> to write to.</param>
+            <param name="buffer">Buffer for reading/writing.</param>
+            <param name="interventionCallback">Allows to inspect/modify data between reading and writing.</param>
+            <returns>Total number of bytes read/written.</returns>
+        </member>
+        <member name="T:Kw.Common.TemporaryFolder">
+            <summary>
+            Поддиректория в папке TEMP (удаляется при Dispose)
+            </summary>
+        </member>
+        <member name="T:Kw.Common.TemporaryFile">
+            <summary>
+            Файл в папке TEMP (удаляется при Dispose).
+            </summary>
+        </member>
+        <member name="P:Kw.Common.TemporaryFile.Path">
+            <summary>
+            Полный путь к файлу.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.TemporaryFile.#ctor(System.String)">
+            <summary>
+            Инициализирует новый экземпляр <see cref="T:Kw.Common.TemporaryFile"/>.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.TemporaryFile.Dispose">
+            <summary>
+            Удаляет файл.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.Threading.Event">
+            <summary>
+            Событие с флагом. Может случаться один раз.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.Threading.Event.State">
+            <summary>
+            Объект состояния переданный в вызове Happen().
+            </summary>
+        </member>
+        <member name="P:Kw.Common.Threading.Event.HasHappened">
+            <summary>
+            Флаг что событие произошло.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.Threading.Event.Happened">
+            <summary>
+            Время события или null.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.Threading.Event.Waitable">
+            <summary>
+            WaitHandle который можно ожидать.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.Threading.Event.#ctor(System.String)">
+            <summary>
+            Инициализирует объект события.
+            </summary>
+            <param name="name">Имя события.</param>
+        </member>
+        <member name="M:Kw.Common.Threading.Event.Happen(System.Object)">
+            <summary>
+            Помечает событие как произошедшее.
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="T:Kw.Common.Threading.Event`1">
+            <summary>
+            Типизированное событие.
+            </summary>
+            <typeparam name="T">Тип состояния.</typeparam>
+        </member>
+        <member name="T:Kw.Common.Threading.IPreparable">
+            <summary>
+            Интерфейс подготавливаемабельного объекта.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.Threading.Interruptable">
+            <summary>
+            Реализует прерываемые операции.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.Threading.Interruptable.Signal">
+            <summary>
+            Результат выполнения действия
+            </summary>
+        </member>
+        <member name="F:Kw.Common.Threading.Interruptable.Signal.Elapsed">
+            <summary>
+            Истекло заданное время
+            </summary>
+        </member>
+        <member name="F:Kw.Common.Threading.Interruptable.Signal.Shutdown">
+            <summary>
+            Приложение было остановлено
+            </summary>
+        </member>
+        <member name="F:Kw.Common.Threading.Interruptable.Signal.Pause">
+            <summary>
+            Приложение было приостановлено
+            </summary>
+        </member>
+        <member name="F:Kw.Common.Threading.Interruptable.Signal.Application">
+            <summary>
+            Сигнал, определяемый приложением.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.Threading.Interruptable.Wait(System.Int64,System.Int32,System.Func{System.Boolean})">
+            <summary>
+            Ждет заданное время. Ожидание может быть прервано остановкой или приостановкой приложения.
+            </summary>
+            <param name="period">Время ожидания</param>
+            <param name="sleep">Время паузы (атомарное время ожидания)</param>
+            <param name="appSignal">Пользовательский callback для определяемого приложением сигнала.</param>
+            <returns>Результат ожидания</returns>
+        </member>
+        <member name="T:Kw.Common.Threading.ExecutionThread">
+            <summary>
+            System.Threading.Thread wrapper.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.Threading.ExecutionThread.Target">
+            <summary>
+            Код выполнения в потоке.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.Threading.ExecutionThread.Thread">
+            <summary>
+            Ссылка на объект потока.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.Threading.ExecutionThread.ManagedThreadId">
+            <summary>
+            ID потока.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.Threading.ExecutionThread.NativeThreadId">
+            <summary>
+            ID потока.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThread.op_Implicit(Kw.Common.Threading.ExecutionThread)~System.Threading.WaitHandle">
+            <summary>
+            Преобразование к типу WaitHandle.
+            </summary>
+            <param name="p">Объект ExecutionThread.</param>
+            <returns>WaitHandle.</returns>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThread.op_Implicit(Kw.Common.Threading.ExecutionThread)~System.Threading.Thread">
+            <summary>
+            Преобразование к типу Thread.
+            </summary>
+            <param name="p">Объект ExecutionThread.</param>
+            <returns>Thread.</returns>
+        </member>
+        <member name="P:Kw.Common.Threading.ExecutionThread.Elapsed">
+            <summary>
+            Время выполнения потока.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThread.Start">
+            <summary>
+            Запускает поток на выполнение.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThread.ThreadProc">
+            <summary>
+            Функция потока.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThread.KillActiveTasks(System.Nullable{System.Int32})">
+            <summary>
+            Убивает активные задачи
+            </summary>
+            <param name="wait"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThread.StartNew(System.Action,System.Threading.ThreadPriority)">
+            <summary>
+            Создает и запускает новый поток.
+            </summary>
+            <param name="action">Код потока.</param>
+            <param name="priority"></param>
+            <returns>Объект ExecutionThread.</returns>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThread.StartNew(System.Action)">
+            <summary>
+            Создает и запускает новый поток.
+            </summary>
+            <param name="action">Код потока.</param>
+            <returns>Объект ExecutionThread.</returns>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThread.StartNew``1(System.Action{``0},``0)">
+            <summary>
+            Создает и запускает новый поток.
+            </summary>
+            <param name="action">Код потока.</param>
+            <param name="parameter">Параметр потока.</param>
+            <returns>Объект ExecutionThread.</returns>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThread.StartNew``2(System.Func{``0,``1},``0)">
+            <summary>
+            Создает и запускает новый поток.
+            </summary>
+            <param name="action">Код потока.</param>
+            <param name="parameter">Параметр потока.</param>
+            <returns>Объект ExecutionThread.</returns>
+        </member>
+        <member name="T:Kw.Common.Threading.ExecutionThread`1">
+            <summary>
+            Поток исполнения на основе System.Threading.Thread с параметром T.
+            </summary>
+        </member>
+        <member name="F:Kw.Common.Threading.ExecutionThread`1._parameter">
+            <summary>
+            Значение параметра функции потока.
+            </summary>
+        </member>
+        <member name="F:Kw.Common.Threading.ExecutionThread`1._parameterSet">
+            <summary>
+            Флаг установки параметра функции потока.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.Threading.ExecutionThread`1.Parameter">
+            <summary>
+            Параметр функции потока.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThread`1.Start">
+            <summary>
+            Запускает поток на выполнение.
+            </summary>
+            <remarks>
+            Использование метода Start() без параметра требует предварительного присваивания свойства Parameter.
+            </remarks>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThread`1.Start(`0)">
+            <summary>
+            Запускает поток на выполнение.
+            </summary>
+            <param name="parameter">Параметр функции потока.</param>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThread`1.ThreadProc(System.Object)">
+            <summary>
+            Функция потока.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.Threading.ExecutionThread`2">
+            <summary>
+            Поток исполнения на основе System.Threading.Thread с параметром T и типом возвращаемого значения R.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.Threading.ExecutionThread`2.Result">
+            <summary>
+            Результат выполнения потока.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.Threading.ExecutionThreads">
+            <summary>
+            Пул потоков для параллельного выполнения задач.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.Threading.ExecutionThreads.Capacity">
+            <summary>
+            Максимальное количество потоков.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.Threading.ExecutionThreads.Errors">
+            <summary>
+            Коллекция исключений в функциях потоков.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.Threading.ExecutionThreads.AdviseCapacity">
+            <summary>
+            Рекомендуемое количество потоков.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThreads.#ctor(System.Int32)">
+            <summary>
+            Иницилизирует объект пула.
+            </summary>
+            <param name="capacity">Количество потоков.</param>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThreads.Join(System.Nullable{System.Int32})">
+            <summary>
+            Ожидает завершения всех поставленных в очередь задач.
+            </summary>
+            <returns>Ошибки выполнения.</returns>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThreads.Enqueue(System.Action)">
+            <summary>
+            Ставит в очередь задачу.
+            </summary>
+            <param name="action">Метод задачи.</param>
+            <returns>Объект ExecutionThread.</returns>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThreads.Enqueue``1(System.Action{``0},``0)">
+            <summary>
+            Ставит в очередь задачу с входными данными.
+            </summary>
+            <typeparam name="T">Тип входных данных задачи.</typeparam>
+            <param name="action">Метод задачи.</param>
+            <param name="parameter">Входные данные задачи.</param>
+            <returns>Объект ExecutionThread.</returns>
+        </member>
+        <member name="M:Kw.Common.Threading.ExecutionThreads.Enqueue``2(System.Func{``0,``1},``0)">
+            <summary>
+            Ставит в очередь задачу с входными и выходными данными.
+            </summary>
+            <typeparam name="T">Тип входных данных задачи.</typeparam>
+            <typeparam name="R">Тип выходных данных задачи.</typeparam>
+            <param name="action">Метод задачи.</param>
+            <param name="parameter">Входные данные задачи.</param>
+            <returns>Объект ExecutionThread.</returns>
+        </member>
+        <member name="T:Kw.Common.Threading.Waitable">
+            <summary>
+            Поддержка операций ожидания.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.Threading.Waitable.WaitAll(System.Threading.WaitHandle[],System.Int32)">
+            <summary>
+            Ожидает получение сигнала всеми элементами массива.
+            </summary>
+            <param name="handles">Массив объектов WaitHandle.</param>
+            <param name="waitTimeout">Тайм-аут ожидания.</param>
+            <remarks>Метод снимает ограничения на параметр handles. Допустимы массивы размером более 64 элементов и повторяющиеся элементы.</remarks>
+        </member>
+        <member name="M:Kw.Common.Threading.Waitable.WaitAll(System.Collections.Generic.IEnumerable{Kw.Common.Threading.IPreparable},System.Int32)">
+            <summary>
+            Ожидает готовности массива подготавливаемабельных объектов.
+            </summary>
+            <param name="source">Исходный массив.</param>
+            <param name="waitTimeout">Тайм-аут ожидания.</param>
+        </member>
+        <member name="M:Kw.Common.Threading.Waitable.Pulse(System.Threading.ManualResetEvent)">
+            <summary>
+            Единичный всплеск события
+            </summary>
+            <param name="evt">ManualResetEvent</param>
+        </member>
+        <member name="T:Kw.Common.MachineState">
+            <summary>
+            Три состояния логического процесса.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.ThreeStateMachine">
+            <summary>
+            Исполнитель логического процесса на основе автомата трёх состояний.
+            </summary>
+            <remarks>
+            Автомат (и процесс) может:
+            – не работать (состояние STOPPED);
+            – работать (состояние RUNNING);
+            – находиться в неработоспособном состоянии вследствии необработанного исключения (состояние FAILED).
+            См. комментарии к таблице переходов.
+            </remarks>
+            <summary>
+            Исполнитель логического процесса на основе автомата трёх состояний.
+            </summary>
+            <remarks>
+            Между состояниями определены правила перехода:
+            – из состояний FAILED и RUNNING контролируемые переходы в состояние STOPPED;
+            – из состояния STOPPED контролируемый переход в состояние RUNNING;
+            – из состояния RUNNING неконтролируемый переход в состояние FAILED.
+            </remarks>
+        </member>
+        <member name="M:Kw.Common.ThreeStateMachine.ValidateControlledChange(Kw.Common.MachineState)">
+            <summary>
+            Проверка состояния для управляемого перехода.
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="M:Kw.Common.ThreeStateMachine.ControlledChange(Kw.Common.MachineState,System.Boolean)">
+            <summary>
+            Переключает процесс в другое состояние (запуск и остановка)
+            при помощи управляемого перехода.
+            </summary>
+            <param name="state">Новое состояние.</param>
+            <param name="synchronous">Ожидать смены состояния?</param>
+        </member>
+        <member name="M:Kw.Common.ThreeStateMachine.UncontrolledChange(System.Exception,System.Boolean)">
+            <summary>
+            Переключает процес в состояние FAILED при помощи неуправляемого перехода.
+            </summary>
+            <param name="error"></param>
+            <param name="synchronous">Ожидать смены состояния?</param>
+        </member>
+        <member name="M:Kw.Common.ThreeStateMachine.WaitOne(System.Int32)">
+            <summary>
+            Ожидает завершения перехода.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.ThreeStateMachine.WaitEnd(System.Int32)">
+            <summary>
+            Ожидает завершения потока исполнителя.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.ThreeStateMachine.Shutdown(System.Boolean)">
+            <summary>
+            Завершает поток управления
+            </summary>
+        </member>
+        <member name="M:Kw.Common.ThreeStateMachine.Signal">
+            <summary>
+            Прерывает ожидание и сигнализирует о смене состояния.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kw.Common.ThreeStateMachine.MachineProc">
+            <summary>
+            Поток управления логическим процессом.
+            Переходы между состояниями выполняются в этом потоке.
+            </summary>
+        </member>
+        <member name="E:Kw.Common.ThreeStateMachine.StateChanged">
+            <summary>
+            Уведомление об изменении состояния.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.ThreeStateMachine.Running">
+            <summary>
+            Запуск процесса (управляемый переход).
+            </summary>
+            <returns>Флаг подтверждения перехода.</returns>
+        </member>
+        <member name="M:Kw.Common.ThreeStateMachine.Stopping">
+            <summary>
+            Остановка процесса (управляемый переход).
+            </summary>
+            <returns>Флаг подтверждения перехода.</returns>
+        </member>
+        <member name="M:Kw.Common.ThreeStateMachine.Failing">
+            <summary>
+            Перевод процесса в состояние неисправности (неуправляемый переход).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kw.Common.ThreeStateMachine.CreateTransitionMatrix">
+            <summary>
+            Заполнение матрицы переходов.
+            </summary>
+        </member>
+        <member name="P:Kw.Common.ThreeStateMachine.Item(Kw.Common.MachineState,Kw.Common.MachineState)">
+            <summary>
+            Доступ к матрице переходов по MachineState.
+            </summary>
+        </member>
+        <member name="F:Kw.Common.ThreeStateMachine.Transitions">
+            <summary>
+            Матрица переходов.
+            Измерение 1 текущее состояние.
+            Измерение 2 новое состояние.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.TimeExtensions">
+            <summary>
+            Методы расширения для работы с DateTime и TimeSpan
+            </summary>
+        </member>
+        <member name="T:Kw.Common.DebugOutput">
+            <summary>
+            Обеспечивает вывод отладочной информации независимо от конфигурации проекта
+            </summary>
+        </member>
+        <member name="P:Kw.Common.DebugOutput.Prefix">
+            <summary>
+            Префиксная строка для идентификации вывода
+            </summary>
+        </member>
+        <member name="M:Kw.Common.DebugOutput.#cctor">
+            <summary>
+            Устанавливает префиксную строку по умолчанию
+            </summary>
+        </member>
+        <member name="M:Kw.Common.DebugOutput.Output(System.String)">
+            <summary>
+            Функция API: вывод отладочной информации
+            </summary>
+            <param name="outputString">Строка для вывода</param>
+        </member>
+        <member name="M:Kw.Common.DebugOutput.OutputDebugString(System.String)">
+            <summary>
+            Вывод отладочной информации с префиксом и переводом строки
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Kw.Common.DebugOutput.WriteLine(System.String,System.Object[])">
+            <summary>
+            Вывод отладочной информации с форматированием
+            </summary>
+            <param name="format">Фоматная строка</param>
+            <param name="arguments">Объекты для вывода</param>
+        </member>
+        <member name="M:Kw.Common.ExceptionExtensions.Rethrow(System.Exception)">
+            <summary>
+            Повторный выбос исключения с предохранением стека вызова.
+            </summary>
+            <param name="x">Объект исключения для повторного вызова.</param>
+        </member>
+        <member name="M:Kw.Common.ExceptionExtensions.UnwrapRethrown(System.Exception)">
+            <summary>
+            Возвращает повторно-выброшенное исключение содержащееся в rethrow-исключении.
+            </summary>
+            <param name="x">Объект исключения.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Kw.Common.LinqExtensions">
+            <summary>
+            Полезные методы расширения для LINQ
+            </summary>
+        </member>
+        <member name="M:Kw.Common.LinqExtensions.In``1(``0,System.Linq.IQueryable{``0})">
+            <summary>
+            Проверяет вхождение заданного элемента в коллекцию.
+            </summary>
+            <typeparam name="T">Тип элемента коллекции</typeparam>
+            <param name="t">Элемент</param>
+            <param name="collection">Коллекция</param>
+            <returns>True если элемент входит в коллецию, иначе False</returns>
+        </member>
+        <member name="M:Kw.Common.LinqExtensions.AllIn``1(System.Collections.Generic.IEnumerable{``0},``0[])">
+            <summary>
+            Проверяет, что все элементы коллекции all содержатся в коллекции collection.
+            </summary>
+            <typeparam name="T">Тип данных коллекций.</typeparam>
+            <param name="all">Проверяемая коллекция.</param>
+            <param name="collection">Целевая коллекция.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Kw.Common.LinqExtensions.AnyIn``1(System.Collections.Generic.IEnumerable{``0},``0[])">
+            <summary>
+            Проверяет, что любой элемент коллекции all содержатся в коллекции collection.
+            </summary>
+            <typeparam name="T">Тип данных коллекций.</typeparam>
+            <param name="all">Проверяемая коллекция.</param>
+            <param name="collection">Целевая коллекция.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Kw.Common.LinqExtensions.Split``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Разбивает коллекцию на подколлекции указанного размера.
+            </summary>
+            <typeparam name="T">Тип элементов коллекции.</typeparam>
+            <param name="source">Исходная коллекция.</param>
+            <param name="portion">Размер подколлекции.</param>
+            <returns>Коллекция подколлекций.</returns>
+        </member>
+        <member name="M:Kw.Common.LinqExtensions.Append``1(``0,System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Concatenates single value and a collection.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.MappingAttribute">
+            <summary>
+            Атрибут, описывающий привязку
+            </summary>
+        </member>
+        <member name="T:Kw.Common.ReflectionExtensions">
+            <summary>
+            Некоторые методы расширения для Reflection
+            </summary>
+        </member>
+        <member name="T:Kw.Common.StringExtensions">
+            <summary>
+            Методы расширения для класса System.String
+            </summary>
+        </member>
+        <member name="M:Kw.Common.StringExtensions.Unpascal(System.String)">
+            <summary>
+            Преобразует строку в нотации PASCAL во фразу с расставленными пробелами.
+            </summary>
+            <param name="pascal">Строка в нотации PASCAL.</param>
+            <returns>Преобразованная фраза.</returns>
+        </member>
+        <member name="M:Kw.Common.StringExtensions.Split(System.String,System.String,System.StringSplitOptions)">
+            <summary>
+            Returns a string array that contains the substrings in this string that are delimited by specified string.
+            </summary>
+            <param name="text">String to split.</param>
+            <param name="separator">A string that delimit the substrings in this string, an empty array that contains no delimiters, or null.</param>
+            <param name="options">Specifies whether to return empty array elements.</param>
+            <returns>An array whose elements contain the substrings in this string that are delimited by separator.</returns>
+        </member>
+        <member name="T:Kw.Common.TurmoilException">
+            <summary>
+            Исключение для отладки. Означает некий жуткий пипец.
+            </summary>
+        </member>
+        <member name="T:Kw.Common.WinAPI">
+            <summary>
+            PInvoke-спецификации необходимые сборке Kw.Common
+            </summary>
+        </member>
+        <member name="T:Kw.Common.XBase">
+            <summary>
+            Базовый класс с XML-представлением.
+            </summary>
+        </member>
+        <member name="M:Kw.Common.XBase.#ctor(System.Xml.Linq.XName,System.String)">
+            <summary>
+            Инициализирует экземпляр <see cref="T:Kw.Common.XBase"/>.
+            </summary>
+            <param name="name">Имя корневого элемента.</param>
+            <param name="contents">XML-текст.</param>
+        </member>
+        <member name="M:Kw.Common.XBase.GetAttribute``1(System.String,``0)">
+            <summary>
+            Получает значение атрибута.
+            </summary>
+            <typeparam name="T">Тип значения.</typeparam>
+            <param name="name">Название атрибута.</param>
+            <param name="default">Значение по умолчанию.</param>
+            <returns>Значение атрибута.</returns>
+        </member>
+        <member name="M:Kw.Common.XBase.GetAttribute(System.String,System.String)">
+            <summary>
+            Получает текстовое значение атрибута.
+            </summary>
+            <param name="name">Название атрибута.</param>
+            <param name="default">Значение по умолчанию.</param>
+            <returns>Значение атрибута.</returns>
+        </member>
+        <member name="M:Kw.Common.XBase.SetAttribute``1(System.String,``0)">
+            <summary>
+            Устанавливает значение атрибута.
+            </summary>
+            <typeparam name="T">Тип значения.</typeparam>
+            <param name="name">Название атрибута.</param>
+            <param name="value">Значение атрибута.</param>
+        </member>
+        <member name="M:Kw.Common.XBase.SetAttribute(System.String,System.DateTime)">
+            <summary>
+            Устанавливает значение атрибута.
+            </summary>
+            <param name="name">Название атрибута.</param>
+            <param name="value">Значение атрибута.</param>
+        </member>
+        <member name="M:Kw.Common.XBase.SetAttribute(System.String,System.String)">
+            <summary>
+            Устанавливает текстовое значение атрибута.
+            </summary>
+            <param name="name">Название атрибута.</param>
+            <param name="value">Значение атрибута.</param>
+        </member>
+        <member name="M:Kw.Common.XBase.GetProperty``1(System.String)">
+            <summary>
+            Получает значение дочернего элемента.
+            </summary>
+            <typeparam name="T">Тип значения.</typeparam>
+            <param name="name">Название дочернего элемента.</param>
+            <returns>Значение элемента.</returns>
+        </member>
+        <member name="M:Kw.Common.XBase.GetProperty(System.Type,System.String)">
+            <summary>
+            Получает значение дочернего элемента.
+            </summary>
+            <param name="type"></param>
+            <param name="name">Название дочернего элемента.</param>
+            <returns>Значение элемента.</returns>
+        </member>
+        <member name="M:Kw.Common.XBase.GetProperty(System.String)">
+            <summary>
+            Получает текстовое значение дочернего элемента.
+            </summary>
+            <param name="name">Название дочернего элемента.</param>
+            <returns>Значение элемента.</returns>
+        </member>
+        <member name="M:Kw.Common.XBase.GetProperties``1(System.String)">
+            <summary>
+            Получает значения дочерних элементов.
+            </summary>
+            <typeparam name="T">Тип значения.</typeparam>
+            <param name="name">Название дочернего элемента.</param>
+            <returns>Значения элементов.</returns>
+        </member>
+        <member name="M:Kw.Common.XBase.GetProperties(System.String)">
+            <summary>
+            Получает значения дочерних элементов.
+            </summary>
+            <param name="name">Название дочернего элемента.</param>
+            <returns>Значения элементов.</returns>
+        </member>
+        <member name="M:Kw.Common.XBase.SetProperty``1(System.String,``0)">
+            <summary>
+            Устанавливает значение дочернего элемента.
+            </summary>
+            <typeparam name="T">Тип значения.</typeparam>
+            <param name="name">Название дочернего элемента.</param>
+            <param name="value">Значение элемента.</param>
+        </member>
+        <member name="M:Kw.Common.XBase.SetProperty(System.String,System.DateTime)">
+            <summary>
+            Устанавливает значение дочернего элемента.
+            </summary>
+            <param name="name">Название дочернего элемента.</param>
+            <param name="value">Значение элемента.</param>
+        </member>
+        <member name="M:Kw.Common.XBase.SetProperty(System.String,System.String)">
+            <summary>
+            Устанавливает текстовое значение дочернего элемента.
+            </summary>
+            <param name="name">Название дочернего элемента.</param>
+            <param name="value">Значение элемента.</param>
+        </member>
+        <member name="M:Kw.Common.XBase.SetProperties``1(System.String,``0[])">
+            <summary>
+            Устанавливает значение дочернего элемента.
+            </summary>
+            <typeparam name="T">Тип значения.</typeparam>
+            <param name="name">Название дочернего элемента.</param>
+            <param name="values">Значения элементов.</param>
+        </member>
+        <member name="M:Kw.Common.XBase.SetProperties(System.String,System.String[])">
+            <summary>
+            Устанавливает текстовые значения дочерних элементов.
+            </summary>
+            <param name="name">Название дочернего элемента.</param>
+            <param name="values">Значения элементов.</param>
+        </member>
+        <member name="M:Kw.Common.XBase.AddCollection(System.String,Kw.Common.XBase[])">
+            <summary>
+            Устанавливает коллекцию дочерних элементов.
+            </summary>
+            <param name="name">Название дочернего элемента.</param>
+            <param name="values">Значения элементов.</param>
+        </member>
+        <member name="M:Kw.Common.XBase.EnsureXml(System.Xml.Linq.XName,System.String)">
+            <summary>
+            Создает текст XML-элемента.
+            </summary>
+            <param name="name">Имя элемента.</param>
+            <param name="contents">Исходный XML-текст.</param>
+            <returns>XML-строка.</returns>
+        </member>
+        <member name="T:Kw.Common.XTokens">
+            <summary>
+            Простой способ получить список строк из XML-файла.
+            </summary>
+        </member>
+        <member name="T:__init">
+            <summary>
+            Module initialization.
+            </summary>
+        </member>
+    </members>
+</doc>
